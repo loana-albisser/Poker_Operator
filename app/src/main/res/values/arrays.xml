@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="limit">
+        <item> Limit1</item>
+        <item> Limit2</item>
+    </string-array>
+
+    <string-array name="game">
+        <item> Game1</item>
+        <item> Game2</item>
+    </string-array>
+
+    <string-array name="stake">
+        <item> Stake1</item>
+        <item> Stake2</item>
+    </string-array>
+
+    <string-array name="bankroll">
+        <item> Bankroll1</item>
+        <item> Bankroll2</item>
+    </string-array>
+
+    <string-array name="location">
+        <item> Location1</item>
+        <item> Location2</item>
+    </string-array>
+
+    <string-array name="currency">
+        <item> Currency1</item>
+        <item> Currency2</item>
+    </string-array>
+
+    <string-array name="currencyRate">
+        <item> Rate1</item>
+        <item> Rate2</item>
+    </string-array>
+
+</resources>

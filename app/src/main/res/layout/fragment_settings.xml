@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_bankroll"
+        android:id="@+id/btn_bankroll"
+        android:onClick="startBankroll"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_games"
+        android:id="@+id/btn_games"
+        android:onClick="startGames"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_limit"
+        android:id="@+id/btn_limit"
+        android:layout_gravity="center_horizontal"
+        android:onClick="startLimit"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_location"
+        android:id="@+id/btn_location"
+        android:onClick="startLocation"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_stake"
+        android:id="@+id/btn_stake"
+        android:onClick="startStake"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_currency"
+        android:id="@+id/btn_currency"
+        android:layout_gravity="right"
+        android:onClick="startCurrency"/>
+</LinearLayout>

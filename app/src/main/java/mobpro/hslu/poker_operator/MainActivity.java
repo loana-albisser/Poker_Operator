@@ -1,22 +1,29 @@
 package mobpro.hslu.poker_operator;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+import android.widget.Button;
+
+import java.util.Calendar;
+
+import mobpro.hslu.poker_operator.settings.SettingsBankroll;
+import mobpro.hslu.poker_operator.settings.SettingsCurrency;
+import mobpro.hslu.poker_operator.settings.SettingsGames;
+import mobpro.hslu.poker_operator.settings.SettingsLimit;
+import mobpro.hslu.poker_operator.settings.SettingsLocation;
+import mobpro.hslu.poker_operator.settings.SettingsStake;
 
 
 public class MainActivity extends ActionBarActivity
@@ -50,11 +57,30 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        /*FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .commit();*/
+        Fragment fragment;
+        FragmentManager fragmentManager = getSupportFragmentManager();// For AppCompat use getSupportFragmentManager
+        switch(position) {
+            default:
+            case 0:
+                fragment = new FragmentSession();
+                break;
+            case 1:
+                fragment = new FragmentOverview();
+                break;
+            case 2:
+                fragment = new FragmentSettings();
+                break;
+        }
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
                 .commit();
     }
+
+
 
     public void onSectionAttached(int number) {
         switch (number) {
@@ -76,6 +102,48 @@ public class MainActivity extends ActionBarActivity
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
     }
+
+    public void startBankroll(View v) {
+        Intent intent = new Intent(this, SettingsBankroll.class);
+        startActivity(intent);
+    }
+
+    public void startCurrency(View v) {
+        Intent intent = new Intent(this, SettingsCurrency.class);
+        startActivity(intent);
+    }
+
+    public void startGames(View v) {
+        Intent intent = new Intent(this, SettingsGames.class);
+        startActivity(intent);
+    }
+
+    public void startLimit(View v) {
+        Intent intent = new Intent(this, SettingsLimit.class);
+        startActivity(intent);
+    }
+
+    public void startLocation(View v) {
+        Intent intent = new Intent(this, SettingsLocation.class);
+        startActivity(intent);
+    }
+
+    public void startStake(View v) {
+        Intent intent = new Intent(this, SettingsStake.class);
+        startActivity(intent);
+    }
+
+    public void doDatePiker (View v){
+        DialogFragment dialogFragment = new DatePicker();
+        dialogFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    public void doTimePiker (View v){
+        DialogFragment dialogFragment = new TimePicker();
+        dialogFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+
+
 
 
     @Override
@@ -145,5 +213,6 @@ public class MainActivity extends ActionBarActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
+
 
 }
