@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="667dp"
+        android:id="@+id/scrollView8" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
+                android:baselineAligned="false"
+                android:showDividers="end">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="170dp"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_type"
+                        android:id="@+id/txt_type"
+                        android:layout_margin="5dp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:layout_width="114dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/spinner_limitType"
+                        android:spinnerMode="dropdown"
+                        android:entries="@array/limit"
+                        android:layout_gravity="left"
+                        android:layout_margin="5dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:layout_gravity="right"
+                    android:layout_margin="5dp">
+
+                    <TextView
+                        android:layout_width="168dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/txt_gameType"
+                        android:id="@+id/txt_gameType"
+                        android:textStyle="bold"
+                        android:layout_margin="5dp" />
+
+                    <Spinner
+                        android:layout_width="173dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/spinner_gameType"
+                        android:spinnerMode="dropdown"
+                        android:entries="@array/game"
+                        android:gravity="right"
+                        android:layout_margin="5dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_stakes"
+                android:id="@+id/txt_stakes"
+                android:textStyle="bold"
+                android:layout_margin="5dp" />
+
+            <Spinner
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_stake"
+                android:spinnerMode="dropdown"
+                android:entries="@array/stake"
+                android:layout_margin="5dp"
+                android:layout_gravity="right" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_buyIn"
+                    android:id="@+id/txt_buyIn"
+                    android:textStyle="bold"
+                    android:layout_margin="5dp" />
+
+                <EditText
+                    android:layout_width="102dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/editText2"
+                    android:layout_margin="5dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_bankroll"
+                    android:id="@+id/txt_bankroll"
+                    android:textStyle="bold"
+                    android:layout_margin="5dp" />
+
+                <Spinner
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spinner_buyIn"
+                    android:spinnerMode="dropdown"
+                    android:entries="@array/bankroll"
+                    android:layout_margin="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_startDate"
+                    android:id="@+id/btn_startDate"
+                    android:layout_weight="0.5"
+                    android:onClick="doDatePiker"
+                    android:layout_margin="5dp" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_startTime"
+                    android:id="@+id/btn_start"
+                    android:onClick="doTimePiker"
+                    android:layout_weight="0.5"
+                    android:layout_margin="5dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_endDate"
+                    android:id="@+id/btn_endDate"
+                    android:onClick="doDatePiker"
+                    android:layout_weight="0.5"
+                    android:layout_margin="5dp" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_endTime"
+                    android:id="@+id/btn_endTime"
+                    android:onClick="doTimePiker"
+                    android:layout_weight="0.5"
+                    android:layout_margin="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_cashout"
+                    android:id="@+id/textView"
+                    android:textStyle="bold"
+                    android:layout_margin="5dp" />
+
+                <EditText
+                    android:layout_width="109dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/editText"
+                    android:layout_margin="5dp" />
+
+                <Spinner
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spinner_currency"
+                    android:layout_weight="1"
+                    android:spinnerMode="dropdown"
+                    android:entries="@array/currency"
+                    android:layout_margin="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1"
+                android:layout_margin="5dp">
+
+                <Spinner
+                    android:layout_width="170dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spinner_currencyRate"
+                    android:entries="@array/currencyRate"
+                    android:layout_margin="5dp"
+                    android:spinnerMode="dropdown" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txt_rate"
+                    android:id="@+id/textView2" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_location"
+                android:id="@+id/txt_location"
+                android:textStyle="bold"
+                android:layout_margin="5dp" />
+
+            <Spinner
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_location"
+                android:spinnerMode="dropdown"
+                android:entries="@array/location"
+                android:layout_margin="5dp" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_save"
+                android:id="@+id/btn_save"
+                android:layout_margin="5dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
