@@ -4,19 +4,20 @@ package mobpro.hslu.poker_operator.entity;
  * Created by tbeugste on 04.05.2015.
  */
 public class Currency {
-    private String id;
+
+    private String description;
 
     public Currency(){};
 
-    public Currency(String id) {
-        this.id = id;
+    public Currency(String description) {
+        this.description = description;
     };
 
-    public String getID() {
-        return this.id;
+    public String description() {
+        return this.description;
     }
 
-    public void setID(String id) {
-        this.id = id;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

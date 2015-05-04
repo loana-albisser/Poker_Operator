@@ -5,6 +5,7 @@ package mobpro.hslu.poker_operator.entity;
  */
 public class Bankroll {
 
+    private long id;
     private String description;
     private Currency currency = new Currency();
 
@@ -14,6 +15,14 @@ public class Bankroll {
     public Bankroll(String description, Currency currency) {
         this.description = description;
         this.currency = currency;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public void setDescription(String description) {
