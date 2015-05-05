@@ -17,7 +17,25 @@ public class DbHelper extends SQLiteOpenHelper{
     public static String TABLE_LOCATION = "LOCATION";
     public static String TABLE_STAKE = "STAKE";
     public static String TABLE_BANKROLL = "BANKROLL";
+    public static String TABLE_SESSION = "Session";
 
+    public static String COLUMN_ID = "id";
+    public static String COLUMN_DESCRIPTION = "description";
+    public static String COLUMN_CURRENCY = "Currency";
+    public static String COLUMN_SMALL_BLIND = "smallBlind";
+    public static String COLUMN_BIG_BLIND = "bigBlind";
+    public static String COLUMN_LIMITTYPE = "limittype";
+    public static String COLUMN_GAMES = "game";
+    public static String COLUMN_STAKE = "stake";
+    public static String COLUMN_BUYIN = "buyin";
+    public static String COLUMN_BANKROLL = "bankroll";
+    public static String COLUMN_LOCATION = "location";
+    public static String COLUMN_START_DATE = "startDate";
+    public static String COLUMN_END_DATE = "endDate";
+    public static String COLUMN_START_TIME = "startTime";
+    public static String COLUMN_END_TIME = "endTime";
+    public static String COLUMN_CASHOUT = "cashout";
+    public static String COLUMN_CRRATE = "crrate";
 
     public DbHelper(final Context context) {
         super(context, DbAdapter.DB_NAME , null, DbAdapter.DB_Version);
@@ -65,7 +83,7 @@ public class DbHelper extends SQLiteOpenHelper{
         String CREATE_LOCATION_TABLE = "CREATE TABLE "+this.TABLE_LOCATION +" (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "description TEXT, " +
-                "fk_Currency TEXT) ";
+                "Currency TEXT) ";
         db.execSQL(CREATE_LOCATION_TABLE);
     }
 
@@ -81,7 +99,7 @@ public class DbHelper extends SQLiteOpenHelper{
         String CREATE_BANKROLL_TABLE = "CREATE TABLE "+this.TABLE_BANKROLL +" (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "description TEXT, " +
-                "fk_Currency TEXT) ";
+                "Currency TEXT) ";
         db.execSQL(CREATE_BANKROLL_TABLE);
     }
 

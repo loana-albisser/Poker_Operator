@@ -1,9 +1,14 @@
 package mobpro.hslu.poker_operator.entity;
 
+import android.content.ContentValues;
+
+import mobpro.hslu.poker_operator.Contract.DbObject;
+import mobpro.hslu.poker_operator.database.DbHelper;
+
 /**
  * Created by manager on 04.05.2015.
  */
-public class Bankroll {
+public class Bankroll implements DbObject {
 
     private long id;
     private String description;
@@ -39,5 +44,19 @@ public class Bankroll {
 
     public void setCurrency(Currency currency) {
         this.currency = currency;
+    }
+
+    @Override
+    public ContentValues getContentValues() {
+        final ContentValues values = new ContentValues();
+        values.put(DbHelper.COLUMN_ID, getId());
+        values.put(DbHelper.COLUMN_DESCRIPTION, getDescription());
+        values.put(DbHelper.COLUMN_CURRENCY, getCurrency().getDescription());
+        return values;
+    }
+
+    @Override
+    public String getTableName() {
+        return DbHelper.TABLE_BANKROLL;
     }
 }
