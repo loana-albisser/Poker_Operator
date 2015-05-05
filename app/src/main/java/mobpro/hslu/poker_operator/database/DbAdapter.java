@@ -1,7 +1,10 @@
 package mobpro.hslu.poker_operator.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+
+import mobpro.hslu.poker_operator.entity.Currency;
 
 /**
  * Created by manager on 04.05.2015.
@@ -26,6 +29,5 @@ public class DbAdapter {
     public void close() {
         dbHelper.close();
     }
-
 
 }

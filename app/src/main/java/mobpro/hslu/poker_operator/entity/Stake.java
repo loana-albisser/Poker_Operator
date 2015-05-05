@@ -1,9 +1,14 @@
 package mobpro.hslu.poker_operator.entity;
 
+import android.content.ContentValues;
+
+import mobpro.hslu.poker_operator.Contract.DbObject;
+import mobpro.hslu.poker_operator.database.DbHelper;
+
 /**
  * Created by manager on 04.05.2015.
  */
-public class Stake {
+public class Stake implements DbObject {
     private long id;
     private float smallBlind;
     private float bigBlind;
@@ -36,5 +41,19 @@ public class Stake {
 
     public void setSmallBlind(float smallBlind) {
         this.smallBlind = smallBlind;
+    }
+
+    @Override
+    public ContentValues getContentValues() {
+        final ContentValues values = new ContentValues();
+        values.put(DbHelper.COLUMN_ID, getId());
+        values.put(DbHelper.COLUMN_SMALL_BLIND, getSmallBlind());
+        values.put(DbHelper.COLUMN_BIG_BLIND, getBigBlind());
+        return values;
+    }
+
+    @Override
+    public String getTableName() {
+        return DbHelper.TABLE_BANKROLL;
     }
 }
