@@ -2,11 +2,15 @@ package mobpro.hslu.poker_operator.entity;
 
 import android.content.ContentValues;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 import mobpro.hslu.poker_operator.Contract.DbObject;
+import mobpro.hslu.poker_operator.database.DbAdapter;
 import mobpro.hslu.poker_operator.database.DbHelper;
 
 /**
@@ -26,7 +30,7 @@ public class Session implements DbObject {
     private Currency currency = new Currency();
     private float currencyrate;
 
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yy:HH:mm");
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yy:HH:mm");
 
     public Session() {
         simpleDateFormat.setCalendar(new GregorianCalendar());
@@ -159,5 +163,67 @@ public class Session implements DbObject {
     @Override
     public String getPrimaryFieldValue() {
         return String.valueOf(getId());
+    }
+
+    public static Session getSessionByID(String id, DbAdapter dbAdapter) {
+        Session session = new Session();
+        session.setId(Long.parseLong(id));
+        ContentValues contentValues = dbAdapter.getByObject(session);
+        if(contentValues!= null) {
+            session = copyContentValuesToObject(contentValues, session, dbAdapter);
+        }else{session=null;}
+
+        return session;
+    }
+
+    public static Collection<Session> getAllSessions(DbAdapter dbAdapter) {
+        Collection<Session> allSessions = new ArrayList<>();
+        Collection<ContentValues> allContentValues = dbAdapter.getAllByTable(new Session().getTableName());
+        if(allContentValues!= null) {
+            for(ContentValues contentValues: allContentValues) {
+                allSessions.add(copyContentValuesToObject(contentValues, new Session(), dbAdapter));
+            }
+        }else{allSessions=null;}
+
+        return allSessions;
+    }
+
+    private static Session copyContentValuesToObject(ContentValues contentValues, Session session,
+                                                   DbAdapter dbAdapter) {
+        session.setId(Long.parseLong(contentValues.getAsString(DbHelper.COLUMN_ID)));
+        session.setLimittype(Limittype.getLimittypeByID(
+                contentValues.getAsString(DbHelper.COLUMN_LIMITTYPE), dbAdapter));
+        session.setGames(Games.getGamesByID(
+                contentValues.getAsString(DbHelper.COLUMN_GAMES), dbAdapter));
+        session.setStake(Stake.getGamesByID(
+                contentValues.getAsString(DbHelper.COLUMN_STAKE), dbAdapter));
+        session.setBuyIn(Float.parseFloat(
+                contentValues.getAsString(DbHelper.COLUMN_BUYIN)));
+        session.setBankroll(Bankroll.getBankrollByID(
+                contentValues.getAsString(DbHelper.COLUMN_BANKROLL), dbAdapter));
+        session.setLocation(Location.getLocationsByID(
+                contentValues.getAsString(DbHelper.COLUMN_LOCATION), dbAdapter));
+        Date date = null;
+        try {
+            date = simpleDateFormat.parse(
+                    contentValues.getAsString(DbHelper.COLUMN_START_DATE_TIME));
+        }catch (ParseException pe) {
+            date = null;
+        }
+
+        try {
+            date = simpleDateFormat.parse(
+                    contentValues.getAsString(DbHelper.COLUMN_END_DATE_TIME));
+        }catch (ParseException pe) {
+            date = null;
+        }
+        session.setEndDateTime(date);
+        session.setCashout(Float.parseFloat(
+                contentValues.getAsString(DbHelper.COLUMN_CASHOUT)));
+        session.setCurrency(Currency.getCurrencyByID(
+                contentValues.getAsString(DbHelper.COLUMN_CURRENCY),dbAdapter));
+        session.setCurrencyrate(Float.parseFloat(
+                contentValues.getAsString(DbHelper.COLUMN_CRRATE)));
+        return  session;
     }
 }

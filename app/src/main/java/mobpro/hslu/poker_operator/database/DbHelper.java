@@ -54,8 +54,6 @@ public class DbHelper extends SQLiteOpenHelper{
         }
     }
 
-
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         String CREATE_SESSION_TABLE = "CREATE TABLE "+this.TABLE_SESSION + " (" +
@@ -72,6 +70,7 @@ public class DbHelper extends SQLiteOpenHelper{
                 this.COLUMN_CURRENCY + " TEXT, " +
                 this.COLUMN_CRRATE + " REAL";
     }
+
     private void createSession(SQLiteDatabase db) {
 
     }
@@ -119,5 +118,6 @@ public class DbHelper extends SQLiteOpenHelper{
                 this.COLUMN_CURRENCY + " TEXT) ";
         db.execSQL(CREATE_BANKROLL_TABLE);
     }
+
 
 }

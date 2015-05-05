@@ -2,7 +2,11 @@ package mobpro.hslu.poker_operator.entity;
 
 import android.content.ContentValues;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import mobpro.hslu.poker_operator.Contract.DbObject;
+import mobpro.hslu.poker_operator.database.DbAdapter;
 import mobpro.hslu.poker_operator.database.DbHelper;
 
 /**
@@ -66,5 +70,37 @@ public class Location implements DbObject {
     @Override
     public String getPrimaryFieldValue() {
         return String.valueOf(getId());
+    }
+
+    public static Location getLocationsByID(String id, DbAdapter dbAdapter) {
+        Location location = new Location();
+        location.setId(Long.parseLong(id));
+        ContentValues contentValues = dbAdapter.getByObject(location);
+        if(contentValues!= null) {
+            location = copyContentValuesToObject(contentValues, location, dbAdapter);
+        }else{location=null;}
+
+        return location;
+    }
+
+    public static Collection<Location> getAllLocation(DbAdapter dbAdapter) {
+        Collection<Location> allLocation = new ArrayList<>();
+        Collection<ContentValues> allContentValues = dbAdapter.getAllByTable(new Location().getTableName());
+        if(allContentValues!= null) {
+            for(ContentValues contentValues: allContentValues) {
+                allLocation.add(copyContentValuesToObject(contentValues, new Location(), dbAdapter));
+            }
+        }else{allLocation=null;}
+
+        return allLocation;
+    }
+
+    private static Location copyContentValuesToObject(ContentValues contentValues, Location location,
+                                                      DbAdapter dbAdapter) {
+        location.setId(Long.parseLong(contentValues.getAsString(DbHelper.COLUMN_ID)));
+        location.setDescription(contentValues.getAsString(DbHelper.COLUMN_DESCRIPTION));
+        location.setCurrency(Currency.getCurrencyByID(
+                contentValues.getAsString(DbHelper.COLUMN_CURRENCY), dbAdapter));
+        return  location;
     }
 }

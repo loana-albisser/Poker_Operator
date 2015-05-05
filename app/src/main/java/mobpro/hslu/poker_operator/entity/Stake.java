@@ -2,7 +2,11 @@ package mobpro.hslu.poker_operator.entity;
 
 import android.content.ContentValues;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import mobpro.hslu.poker_operator.Contract.DbObject;
+import mobpro.hslu.poker_operator.database.DbAdapter;
 import mobpro.hslu.poker_operator.database.DbHelper;
 
 /**
@@ -65,5 +69,35 @@ public class Stake implements DbObject {
     @Override
     public String getPrimaryFieldValue() {
         return String.valueOf(getId());
+    }
+
+    public static Stake getGamesByID(String id, DbAdapter dbAdapter) {
+        Stake stake = new Stake();
+        stake.setId(Long.parseLong(id));
+        ContentValues contentValues = dbAdapter.getByObject(stake);
+        if(contentValues!= null) {
+            stake = copyContentValuesToObject(contentValues, stake);
+        }else{stake=null;}
+
+        return stake;
+    }
+
+    public static Collection<Stake> getAllStakes(DbAdapter dbAdapter) {
+        Collection<Stake> allStakes = new ArrayList<>();
+        Collection<ContentValues> allContentValues = dbAdapter.getAllByTable(new Stake().getTableName());
+        if(allContentValues!= null) {
+            for(ContentValues contentValues: allContentValues) {
+                allStakes.add(copyContentValuesToObject(contentValues, new Stake()));
+            }
+        }else{allStakes=null;}
+
+        return allStakes;
+    }
+
+    private static Stake copyContentValuesToObject(ContentValues contentValues, Stake stake) {
+        stake.setId(Long.parseLong(contentValues.getAsString(DbHelper.COLUMN_ID)));
+        stake.setSmallBlind(Float.parseFloat(contentValues.getAsString(DbHelper.COLUMN_SMALL_BLIND)));
+        stake.setBigBlind(Float.parseFloat(contentValues.getAsString(DbHelper.COLUMN_BIG_BLIND)));
+        return  stake;
     }
 }

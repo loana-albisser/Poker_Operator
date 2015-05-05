@@ -2,7 +2,11 @@ package mobpro.hslu.poker_operator.entity;
 
 import android.content.ContentValues;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import mobpro.hslu.poker_operator.Contract.DbObject;
+import mobpro.hslu.poker_operator.database.DbAdapter;
 import mobpro.hslu.poker_operator.database.DbHelper;
 
 /**
@@ -55,5 +59,33 @@ public class Games implements DbObject {
     @Override
     public String getPrimaryFieldValue() {
         return String.valueOf(getId());
+    }
+
+    public static Games getGamesByID(String id, DbAdapter dbAdapter) {
+        Games games= new Games(id);
+        ContentValues contentValues = dbAdapter.getByObject(games);
+        if(contentValues!= null) {
+            games = copyContentValuesToObject(contentValues, games);
+        }else{games=null;}
+
+        return games;
+    }
+
+    public static Collection<Games> getAllGames(DbAdapter dbAdapter) {
+        Collection<Games> allGames = new ArrayList<>();
+        Collection<ContentValues> allContentValues = dbAdapter.getAllByTable(new Games().getTableName());
+        if(allContentValues!= null) {
+            for(ContentValues contentValues: allContentValues) {
+                allGames.add(copyContentValuesToObject(contentValues, new Games()));
+            }
+        }else{allGames=null;}
+
+        return allGames;
+    }
+    
+    private static Games copyContentValuesToObject(ContentValues contentValues, Games games) {
+        games.setId(Long.parseLong(contentValues.getAsString(DbHelper.COLUMN_ID)));
+        games.setDescription(contentValues.getAsString(DbHelper.COLUMN_DESCRIPTION));
+        return  games;
     }
 }

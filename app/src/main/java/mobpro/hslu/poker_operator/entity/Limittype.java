@@ -2,7 +2,11 @@ package mobpro.hslu.poker_operator.entity;
 
 import android.content.ContentValues;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import mobpro.hslu.poker_operator.Contract.DbObject;
+import mobpro.hslu.poker_operator.database.DbAdapter;
 import mobpro.hslu.poker_operator.database.DbHelper;
 
 /**
@@ -55,5 +59,33 @@ public class Limittype implements DbObject {
     @Override
     public String getPrimaryFieldValue() {
         return String.valueOf(getId());
+    }
+
+    public static Limittype getLimittypeByID(String id, DbAdapter dbAdapter) {
+        Limittype limittype = new Limittype(id);
+        ContentValues contentValues = dbAdapter.getByObject(limittype);
+        if(contentValues!= null) {
+            limittype = copyContentValuesToObject(contentValues, limittype);
+        }else{limittype=null;}
+
+        return limittype;
+    }
+
+    public static Collection<Limittype> getAllLimittypes(DbAdapter dbAdapter) {
+        Collection<Limittype> allLimittype = new ArrayList<>();
+        Collection<ContentValues> allContentValues = dbAdapter.getAllByTable(new Limittype().getTableName());
+        if(allContentValues!= null) {
+            for(ContentValues contentValues: allContentValues) {
+                allLimittype.add(copyContentValuesToObject(contentValues, new Limittype()));
+            }
+        }else{allLimittype=null;}
+
+        return allLimittype;
+    }
+
+    private static Limittype copyContentValuesToObject(ContentValues contentValues, Limittype limittype) {
+        limittype.setId(Long.parseLong(contentValues.getAsString(DbHelper.COLUMN_ID)));
+        limittype.setDescription(contentValues.getAsString(DbHelper.COLUMN_DESCRIPTION));
+        return  limittype;
     }
 }
