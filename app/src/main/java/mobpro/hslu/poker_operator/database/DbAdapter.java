@@ -26,4 +26,6 @@ public class DbAdapter {
     public void close() {
         dbHelper.close();
     }
+
+
 }
