@@ -26,10 +26,10 @@
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinner_limitType"
+                android:id="@+id/spinner_gameType"
                 android:spinnerMode="dropdown"
-                android:entries="@array/limit"
-                android:layout_gravity="left"
+                android:entries="@array/game"
+                android:gravity="right"
                 android:layout_margin="5dp" />
 
             <TextView
@@ -44,10 +44,10 @@
             <Spinner
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/spinner_gameType"
+                android:id="@+id/spinner_limitType"
                 android:spinnerMode="dropdown"
-                android:entries="@array/game"
-                android:gravity="right"
+                android:entries="@array/limit"
+                android:layout_gravity="left"
                 android:layout_margin="5dp" />
 
             <TextView
@@ -68,46 +68,39 @@
                 android:layout_margin="5dp"
                 android:layout_gravity="right" />
 
-            <LinearLayout
-                android:orientation="horizontal"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_buyIn"
+                android:id="@+id/txt_buyIn"
+                android:textStyle="bold"
+                android:layout_margin="5dp"
+                style="@style/Base.TextAppearance.AppCompat.Subhead" />
+
+            <EditText
+                android:layout_width="102dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/edit_buyIn"
+                android:layout_margin="5dp" />
+
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:showDividers="end">
+                android:layout_height="wrap_content"
+                android:text="@string/txt_bankroll"
+                android:id="@+id/txt_bankroll"
+                android:textStyle="bold"
+                android:layout_margin="5dp"
+                style="@style/Base.TextAppearance.AppCompat.Subhead" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_buyIn"
-                    android:id="@+id/txt_buyIn"
-                    android:textStyle="bold"
-                    android:layout_margin="5dp"
-                    style="@style/Base.TextAppearance.AppCompat.Subhead" />
-
-                <EditText
-                    android:layout_width="102dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:ems="10"
-                    android:id="@+id/edit_buyIn"
-                    android:layout_margin="5dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_bankroll"
-                    android:id="@+id/txt_bankroll"
-                    android:textStyle="bold"
-                    android:layout_margin="5dp"
-                    style="@style/Base.TextAppearance.AppCompat.Subhead" />
-
-                <Spinner
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/spinner_buyIn"
-                    android:spinnerMode="dropdown"
-                    android:entries="@array/bankroll"
-                    android:layout_margin="5dp" />
-            </LinearLayout>
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_buyIn"
+                android:spinnerMode="dropdown"
+                android:entries="@array/bankroll"
+                android:layout_margin="5dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -200,15 +193,16 @@
                     android:id="@+id/edit_cashout"
                     android:layout_margin="5dp" />
 
-                <Spinner
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/spinner_currency"
-                    android:layout_weight="1"
-                    android:spinnerMode="dropdown"
-                    android:entries="@array/currency"
-                    android:layout_margin="5dp" />
             </LinearLayout>
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_currency"
+                android:layout_weight="1"
+                android:spinnerMode="dropdown"
+                android:entries="@array/currency"
+                android:layout_margin="5dp" />
 
             <LinearLayout
                 android:orientation="horizontal"

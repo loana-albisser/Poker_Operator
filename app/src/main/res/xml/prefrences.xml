@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="sessionPrefs"
+        android:title="Session Prefrences" />
+
+
+    <ListPreference
+        android:key="gameType"
+        android:entryValues="@array/game"
+        android:entries="@array/game"
+        android:persistent="true"
+        android:shouldDisableView="true"
+        android:title="Game Type"/>
+
+
+    <ListPreference
+        android:key="limit"
+        android:entryValues="@array/limit"
+        android:entries="@array/limit"
+        android:persistent="true"
+        android:shouldDisableView="true"
+        android:title="Limit"/>
+
+    <ListPreference
+        android:key="stakes"
+        android:entryValues="@array/stake"
+        android:entries="@array/stake"
+        android:persistent="true"
+        android:shouldDisableView="true"
+        android:title="Stake"/>
+
+
+    <EditTextPreference
+        android:key="buyIn"
+        android:persistent="true"
+        android:title="Buy-In"/>
+
+    <ListPreference
+        android:dependency="bankroll"
+        android:key="bankroll"
+        android:entryValues="@array/bankroll"
+        android:entries="@array/bankroll"
+        android:persistent="true"
+        android:title="Bankroll"/>
+
+    <EditTextPreference
+        android:key="cashout"
+        android:persistent="true"
+        android:title="Cashout"/>
+
+    <ListPreference
+        android:key="currency"
+        android:entryValues="@array/currency"
+        android:entries="@array/currency"
+        android:persistent="true"
+        android:shouldDisableView="true"
+        android:title="Currency"/>
+
+    <ListPreference
+        android:key="rate"
+        android:entryValues="@array/currencyRate"
+        android:entries="@array/currencyRate"
+        android:persistent="true"
+        android:shouldDisableView="true"
+        android:title="Rate"/>
+
+
+</PreferenceScreen>

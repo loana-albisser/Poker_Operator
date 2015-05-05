@@ -18,5 +18,6 @@ public class FragmentSession extends android.support.v4.app.Fragment {
         View rootView = inflater.inflate(R.layout.fragment_session, container, false);
 
         return rootView;
+
     }
 }
