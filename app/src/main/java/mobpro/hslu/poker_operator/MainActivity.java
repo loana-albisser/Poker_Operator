@@ -4,31 +4,32 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.app.DialogFragment;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import mobpro.hslu.poker_operator.settings.SettingsBankroll;
 import mobpro.hslu.poker_operator.settings.SettingsCurrency;
@@ -36,8 +37,6 @@ import mobpro.hslu.poker_operator.settings.SettingsGames;
 import mobpro.hslu.poker_operator.settings.SettingsLimit;
 import mobpro.hslu.poker_operator.settings.SettingsLocation;
 import mobpro.hslu.poker_operator.settings.SettingsStake;
-
-import static android.widget.AdapterView.*;
 
 
 public class MainActivity extends ActionBarActivity
@@ -58,10 +57,17 @@ public class MainActivity extends ActionBarActivity
     private Button btnstartTime;
     private Button btnendTime;
 
+    private String buyInPref = "buyIn";
+
     private EditText buyIn;
     private EditText cashout;
 
-    private String dialogText ="";
+    private Spinner listGameType;
+    private Spinner listtLimitType;
+    private Spinner listStake;
+    private Spinner listCashout;
+    private Spinner listCurrency;
+    private Spinner listRate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,17 +77,34 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
         getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        PlaceholderFragment fragment = new PlaceholderFragment();
+
 
         // Set up the drawer.
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer,(DrawerLayout) findViewById(R.id.drawer_layout));
+        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
 
+        //setPreferences();
+        //setGameTypePreferences();
+    }
+
+
+
+
+    private static Context mContext;
+
+    public static Context getContext() {
+        return mContext;
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment;
-        FragmentManager fragmentManager = getSupportFragmentManager();// For AppCompat use getSupportFragmentManager
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .commit();// For AppCompat use getSupportFragmentManager
         switch(position) {
             default:
             case 0:
@@ -98,8 +121,6 @@ public class MainActivity extends ActionBarActivity
                 .replace(R.id.container, fragment)
                 .commit();
     }
-
-
 
     public void onSectionAttached(int number) {
         switch (number) {
@@ -193,15 +214,58 @@ public class MainActivity extends ActionBarActivity
 
    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        /*if (!mNavigationDrawerFragment.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
             // if the drawer is not showing. Otherwise, let the drawer
             // decide what to show in the action bar.
             getMenuInflater().inflate(R.menu.main, menu);
             restoreActionBar();
             return true;
-        }
-        return super.onCreateOptionsMenu(menu);
+        };
+       menu.add(Menu.NONE, 1, Menu.NONE, "Prefrences");
+        return super.onCreateOptionsMenu(menu);*/
+       getMenuInflater().inflate(R.menu.main, menu);
+       menu.add(Menu.NONE, 0, 0, "Preferences");
+       return true;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        //setPreferences();
+        //setGameTypePreferences();
+    }
+
+    public void setPreferences(){
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+
+        //SharedPreferences.Editor editor = prefs.edit();
+        //GameType
+
+        listGameType = (Spinner)findViewById(R.id.spinner_gameType);
+        String id = String.valueOf(listGameType.getSelectedItemPosition());
+        //preferences.getInt(id, 0);
+        //SharedPreferences.Editor editor = prefs.edit();
+        //editor.apply();
+        int gamePrefs = prefs.getInt(id, 0);
+
+        listGameType.setSelection(gamePrefs);
+    }
+
+    public void setGameTypePreferences(){
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        TextView view = (TextView) findViewById(R.id.txt_bankroll);
+
+        StringBuilder builder = new StringBuilder();
+
+        String gameType = prefs.getString("gameType","");
+
+        builder.append(""+ gameType);
+        view.setText(builder.toString());
     }
 
     @Override
@@ -209,15 +273,26 @@ public class MainActivity extends ActionBarActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        //int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
             return true;
-        }
+        }*/
+        //Intent intent = new Intent(this, SessionPrefrences.class);
+        //startActivity(intent);
 
+        //return super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+             case 0:
+                 Intent intent = new Intent(this, SessionPrefrences.class);
+                 startActivity(intent);
+                return true;
+        }
         return super.onOptionsItemSelected(item);
+
     }
+
 
     @Override
     public void onClick(View v) {
@@ -244,7 +319,6 @@ public class MainActivity extends ActionBarActivity
                         @Override
                         public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                             btnstartDate.setText(dayOfMonth + "." + (monthOfYear + 1) + "." + year);
-                            //btnstartDate.setText("hello");
                         }
 
 
@@ -271,9 +345,7 @@ public class MainActivity extends ActionBarActivity
                 @Override
                 public void onTimeSet(android.widget.TimePicker view, int hourOfDay, int minute) {
                     btnstartTime.setText(hourOfDay + ":" + minute);
-
-                }
-                    }, mHour, mMinute, false);
+                }}, mHour, mMinute, false);
             tpd.show();
         }
 
@@ -290,6 +362,7 @@ public class MainActivity extends ActionBarActivity
 
 
     }
+
 
     /**
      * A placeholder fragment containing a simple view.
@@ -316,18 +389,28 @@ public class MainActivity extends ActionBarActivity
         public PlaceholderFragment() {
         }
 
-        @Override
+        /*@Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             return rootView;
-        }
+
+        }*/
 
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
             ((MainActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
+        }
+
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+
+            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+
+            //view.setText("hallo");
+            return rootView;
         }
     }
 

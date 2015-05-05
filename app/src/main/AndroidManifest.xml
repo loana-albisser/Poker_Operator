@@ -22,6 +22,7 @@
         <activity android:name=".settings.SettingsLimit"/>
         <activity android:name=".settings.SettingsLocation"/>
         <activity android:name=".settings.SettingsStake"/>
+        <activity android:name=".SessionPrefrences"/>
 
     </application>
 

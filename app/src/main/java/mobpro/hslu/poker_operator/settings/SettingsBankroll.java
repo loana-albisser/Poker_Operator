@@ -51,7 +51,7 @@ public class SettingsBankroll extends Activity{
     public void addBankroll (View v){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setTitle("Add Bankroll");
         builder.setView(input);
 
