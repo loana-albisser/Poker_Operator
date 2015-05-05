@@ -54,7 +54,7 @@ public class MainActivity extends ActionBarActivity
     private Button btnstartTime;
     private Button btnendTime;
 
-    private String buyInPref = "buyInPref";
+    private String buyInPref = "buyIn";
 
     private EditText buyIn;
     private EditText cashout;
@@ -215,6 +215,7 @@ public class MainActivity extends ActionBarActivity
     public void onResume(){
         super.onResume();
         setPreferences();
+        setBuyInPreferences();
     }
 
     public void setPreferences(){
@@ -241,9 +242,9 @@ public class MainActivity extends ActionBarActivity
         editor.putInt(buyInPref, newResumeCount);
         editor.apply();
 
-        EditText countText = (EditText) findViewById(R.id.edit_buyIn);
+        EditText buyText = (EditText) findViewById(R.id.edit_buyIn);
         String text = ""+ newResumeCount;
-        countText.setText(text);
+        buyText.setText(text);
     }
 
     @Override
