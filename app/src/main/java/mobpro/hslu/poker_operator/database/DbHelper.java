@@ -30,10 +30,8 @@ public class DbHelper extends SQLiteOpenHelper{
     public static String COLUMN_BUYIN = "buyin";
     public static String COLUMN_BANKROLL = "bankroll";
     public static String COLUMN_LOCATION = "location";
-    public static String COLUMN_START_DATE = "startDate";
-    public static String COLUMN_END_DATE = "endDate";
-    public static String COLUMN_START_TIME = "startTime";
-    public static String COLUMN_END_TIME = "endTime";
+    public static String COLUMN_START_DATE_TIME = "startDateTime";
+    public static String COLUMN_END_DATE_TIME = "endDateTime";
     public static String COLUMN_CASHOUT = "cashout";
     public static String COLUMN_CRRATE = "crrate";
 
@@ -50,56 +48,75 @@ public class DbHelper extends SQLiteOpenHelper{
             createLocation(db);
             createStake(db);
             createBankroll(db);
+            createSession(db);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        String CREATE_SESSION_TABLE = "CREATE TABLE "+this.TABLE_SESSION + " (" +
+                this.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                this.COLUMN_LIMITTYPE + " INTEGER, " +
+                this.COLUMN_GAMES + " INTEGER, " +
+                this.COLUMN_STAKE + " INTEGER, " +
+                this.COLUMN_BUYIN + " REAL, " +
+                this.COLUMN_BANKROLL + " INTEGER, " +
+                this.COLUMN_LOCATION + " INTEGER, " +
+                this.COLUMN_START_DATE_TIME + " TEXT, " +
+                this.COLUMN_END_DATE_TIME + " TEXT, " +
+                this.COLUMN_CASHOUT + " REAL, " +
+                this.COLUMN_CURRENCY + " TEXT, " +
+                this.COLUMN_CRRATE + " REAL";
+    }
+    private void createSession(SQLiteDatabase db) {
 
     }
 
     private void createGameTable(SQLiteDatabase db) throws SQLException{
         String CREATE_CURRENCY_TABLE = "CREATE TABLE "+this.TABLE_CURRENCY +" (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, description TEXT) ";
+                this.COLUMN_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                this.COLUMN_DESCRIPTION+ " TEXT) ";
         db.execSQL(CREATE_CURRENCY_TABLE);
     }
 
     private void createCurrencyTable(SQLiteDatabase db) throws SQLException{
         String CREATE_CURRENCY_TABLE = "CREATE TABLE "+this.TABLE_CURRENCY +" (" +
-                "description TEXT PRIMARY KEY) ";
+                this.COLUMN_DESCRIPTION + " TEXT PRIMARY KEY) ";
         db.execSQL(CREATE_CURRENCY_TABLE);
     }
 
     private void createLimittype(SQLiteDatabase db) throws SQLException{
         String CREATE_LIMIT_TABLE = "CREATE TABLE "+this.TABLE_LIMITTYPE +" (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "description TEXT) ";
+                this.COLUMN_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                this.COLUMN_DESCRIPTION + " TEXT) ";
         db.execSQL(CREATE_LIMIT_TABLE);
     }
 
     private void createLocation(SQLiteDatabase db) throws SQLException{
         String CREATE_LOCATION_TABLE = "CREATE TABLE "+this.TABLE_LOCATION +" (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "description TEXT, " +
-                "Currency TEXT) ";
+                this.COLUMN_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                this.COLUMN_DESCRIPTION + " TEXT, " +
+                this.COLUMN_CURRENCY + " TEXT) ";
         db.execSQL(CREATE_LOCATION_TABLE);
     }
 
     private void createStake(SQLiteDatabase db) throws SQLException{
         String CREATE_STAKE_TABLE = "CREATE TABLE "+this.TABLE_STAKE +" (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "smallBlind REAL, " +
-                "bigBlind REAL)";
+                this.COLUMN_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                this.COLUMN_SMALL_BLIND + " REAL, " +
+                this.COLUMN_SMALL_BLIND + " REAL)";
         db.execSQL(CREATE_STAKE_TABLE);
     }
 
     private void createBankroll(SQLiteDatabase db) throws SQLException{
         String CREATE_BANKROLL_TABLE = "CREATE TABLE "+this.TABLE_BANKROLL +" (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "description TEXT, " +
-                "Currency TEXT) ";
+                this.COLUMN_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                this.COLUMN_DESCRIPTION + " TEXT, " +
+                this.COLUMN_CURRENCY + " TEXT) ";
         db.execSQL(CREATE_BANKROLL_TABLE);
     }
 

@@ -271,6 +271,7 @@ public class MainActivity extends ActionBarActivity
                 @Override
                 public void onTimeSet(android.widget.TimePicker view, int hourOfDay, int minute) {
                     btnstartTime.setText(hourOfDay + ":" + minute);
+
                 }
                     }, mHour, mMinute, false);
             tpd.show();

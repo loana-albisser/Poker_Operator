@@ -37,4 +37,14 @@ public class Currency implements DbObject {
     public String getTableName() {
         return DbHelper.TABLE_CURRENCY;
     }
+
+    @Override
+    public String getPrimaryFieldName() {
+        return DbHelper.COLUMN_DESCRIPTION;
+    }
+
+    @Override
+    public String getPrimaryFieldValue() {
+        return getDescription();
+    }
 }

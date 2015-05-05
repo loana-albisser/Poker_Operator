@@ -46,4 +46,14 @@ public class Games implements DbObject {
     public String getTableName() {
         return DbHelper.TABLE_GAMES;
     }
+
+    @Override
+    public String getPrimaryFieldName() {
+        return DbHelper.COLUMN_ID;
+    }
+
+    @Override
+    public String getPrimaryFieldValue() {
+        return String.valueOf(getId());
+    }
 }

@@ -2,9 +2,9 @@ package mobpro.hslu.poker_operator.entity;
 
 import android.content.ContentValues;
 
-import java.sql.Time;
-
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import mobpro.hslu.poker_operator.Contract.DbObject;
 import mobpro.hslu.poker_operator.database.DbHelper;
@@ -20,15 +20,17 @@ public class Session implements DbObject {
     private float buyIn;
     private Bankroll bankroll = new Bankroll();
     private Location location = new Location();
-    private Date startDate;
-    private Time startTime;
-    private Date endDate;
-    private Time endTime;
+    private Date startDateTime;
+    private Date endDateTime;
     private float cashout;
     private Currency currency = new Currency();
     private float currencyrate;
 
-    public Session(){};
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yy:HH:mm");
+
+    public Session() {
+        simpleDateFormat.setCalendar(new GregorianCalendar());
+    };
 
     public void setId(long id) {
         this.id = id;
@@ -86,36 +88,20 @@ public class Session implements DbObject {
         return location;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setStartDateTime(Date startDateTime) {
+        this.startDateTime = startDateTime;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public Date getStartDateTime() {
+        return startDateTime;
     }
 
-    public void setStartTime(Time startTime) {
-        this.startTime = startTime;
+    public void setEndDateTime(Date endDateTime) {
+        this.endDateTime = endDateTime;
     }
 
-    public Time getStartTime() {
-        return startTime;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndTime(Time endTime) {
-        this.endTime = endTime;
-    }
-
-    public Time getEndTime() {
-        return endTime;
+    public Date getEndDateTime() {
+        return endDateTime;
     }
 
     public void setCashout(float cashout) {
@@ -146,11 +132,32 @@ public class Session implements DbObject {
     public ContentValues getContentValues() {
         ContentValues values = new ContentValues();
         values.put(DbHelper.COLUMN_ID, getId());
+        values.put(DbHelper.COLUMN_LIMITTYPE, getLimittype().getId());
+        values.put(DbHelper.COLUMN_GAMES, getGames().getId());
+        values.put(DbHelper.COLUMN_STAKE, getStake().getId());
+        values.put(DbHelper.COLUMN_BUYIN, getBuyIn());
+        values.put(DbHelper.COLUMN_BANKROLL, getBankroll().getId());
+        values.put(DbHelper.COLUMN_LOCATION, getLocation().getId());
+        values.put(DbHelper.COLUMN_START_DATE_TIME, simpleDateFormat.format(getStartDateTime()));
+        values.put(DbHelper.COLUMN_END_DATE_TIME, simpleDateFormat.format(getEndDateTime()));
+        values.put(DbHelper.COLUMN_CASHOUT, getCashout());
+        values.put(DbHelper.COLUMN_CURRENCY, getCurrency().getDescription());
+        values.put(DbHelper.COLUMN_CRRATE, getCurrencyrate());
         return values;
     }
 
     @Override
     public String getTableName() {
         return DbHelper.TABLE_SESSION;
+    }
+
+    @Override
+    public String getPrimaryFieldName() {
+        return DbHelper.COLUMN_ID;
+    }
+
+    @Override
+    public String getPrimaryFieldValue() {
+        return String.valueOf(getId());
     }
 }

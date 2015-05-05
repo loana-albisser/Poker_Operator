@@ -3,6 +3,7 @@ package mobpro.hslu.poker_operator.entity;
 import android.content.ContentValues;
 
 import mobpro.hslu.poker_operator.Contract.DbObject;
+import mobpro.hslu.poker_operator.database.DbAdapter;
 import mobpro.hslu.poker_operator.database.DbHelper;
 
 /**
@@ -58,5 +59,15 @@ public class Bankroll implements DbObject {
     @Override
     public String getTableName() {
         return DbHelper.TABLE_BANKROLL;
+    }
+
+    @Override
+    public String getPrimaryFieldName() {
+        return DbHelper.COLUMN_ID;
+    }
+
+    @Override
+    public String getPrimaryFieldValue() {
+        return String.valueOf(getId());
     }
 }
