@@ -8,4 +8,6 @@ import android.content.ContentValues;
 public interface DbObject {
     public ContentValues getContentValues();
     public String getTableName();
+    public String getPrimaryFieldName();
+    public String getPrimaryFieldValue();
 }

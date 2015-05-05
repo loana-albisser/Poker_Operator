@@ -1,10 +1,10 @@
 package mobpro.hslu.poker_operator.database;
 
-import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import mobpro.hslu.poker_operator.entity.Currency;
+import mobpro.hslu.poker_operator.Contract.DbObject;
 
 /**
  * Created by manager on 04.05.2015.
@@ -30,4 +30,18 @@ public class DbAdapter {
         dbHelper.close();
     }
 
+
+    public long CreateDbObject(DbObject dbObject) {
+        return db.insert(dbObject.getTableName(), null, dbObject.getContentValues());
+    }
+
+    public Cursor execQuery(String query,String[] args) {
+        return db.rawQuery(query, args);
+    }
+
+    public boolean updateDbObject(DbObject dbObject) {
+        return db.update(dbObject.getTableName(), dbObject.getContentValues(),
+                dbObject.getPrimaryFieldName() + "=" + dbObject.getPrimaryFieldValue(), null)>0;
+
+    }
 }

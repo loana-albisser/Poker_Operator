@@ -57,4 +57,14 @@ public class Location implements DbObject {
     public String getTableName() {
         return DbHelper.TABLE_LOCATION;
     }
+
+    @Override
+    public String getPrimaryFieldName() {
+        return DbHelper.COLUMN_ID;
+    }
+
+    @Override
+    public String getPrimaryFieldValue() {
+        return String.valueOf(getId());
+    }
 }
