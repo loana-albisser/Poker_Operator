@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -26,6 +28,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import mobpro.hslu.poker_operator.settings.SettingsBankroll;
@@ -75,18 +78,33 @@ public class MainActivity extends ActionBarActivity
         getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        PlaceholderFragment fragment = new PlaceholderFragment();
 
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+
+
         //setPreferences();
-        //setBuyInPreferences();
+        //setGameTypePreferences();
+    }
+
+
+
+
+    private static Context mContext;
+
+    public static Context getContext() {
+        return mContext;
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         Fragment fragment;
-        FragmentManager fragmentManager = getSupportFragmentManager();// For AppCompat use getSupportFragmentManager
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .commit();// For AppCompat use getSupportFragmentManager
         switch(position) {
             default:
             case 0:
@@ -214,11 +232,12 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onResume(){
         super.onResume();
-        setPreferences();
-        setBuyInPreferences();
+        //setPreferences();
+        //setGameTypePreferences();
     }
 
     public void setPreferences(){
+
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
 
@@ -235,16 +254,18 @@ public class MainActivity extends ActionBarActivity
         listGameType.setSelection(gamePrefs);
     }
 
-    public void setBuyInPreferences(){
-        final SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        final int newResumeCount = preferences.getInt(buyInPref,0);
-        final SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt(buyInPref, newResumeCount);
-        editor.apply();
+    public void setGameTypePreferences(){
 
-        EditText buyText = (EditText) findViewById(R.id.edit_buyIn);
-        String text = ""+ newResumeCount;
-        buyText.setText(text);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        TextView view = (TextView) findViewById(R.id.txt_bankroll);
+
+        StringBuilder builder = new StringBuilder();
+
+        String gameType = prefs.getString("gameType","");
+
+        builder.append(""+ gameType);
+        view.setText(builder.toString());
     }
 
     @Override
@@ -368,18 +389,28 @@ public class MainActivity extends ActionBarActivity
         public PlaceholderFragment() {
         }
 
-        @Override
+        /*@Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             return rootView;
-        }
+
+        }*/
 
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
             ((MainActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
+        }
+
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+
+            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+
+
+            //view.setText("hallo");
+            return rootView;
         }
     }
 

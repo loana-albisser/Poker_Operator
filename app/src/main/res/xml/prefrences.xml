@@ -23,7 +23,7 @@
         android:title="Limit"/>
 
     <ListPreference
-        android:key="stakes"
+        android:key="stake"
         android:entryValues="@array/stake"
         android:entries="@array/stake"
         android:persistent="true"

@@ -45,5 +45,6 @@
     <string name="btn_addLimit">add Limit</string>
     <string name="btn_addLocation">add Location</string>
     <string name="btn_addStake">add Stake</string>
-    <string name="action_prefrences">Prefrences</string>
+    <string name="action_prefrences">Preferences</string>
+    <string name="txt_currency">Currency</string>
 </resources>
