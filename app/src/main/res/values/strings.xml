@@ -19,7 +19,7 @@
     <string name="btn_location">Location</string>
     <string name="btn_stake">Stake</string>
     <string name="btn_currency">Currency</string>
-    <string name="btn_add">New Button</string>
+    <string name="btn_add">Add</string>
     <string name="txt_date">Date</string>
     <string name="txt_place">Place</string>
     <string name="txt_stake">Stake</string>
@@ -39,4 +39,6 @@
     <string name="btn_save">Save</string>
     <string name="txt_duration">Duration</string>
     <string name="txt_rate">Rate</string>
+    <string name="txt_start">Start</string>
+    <string name="txt_end">End</string>
 </resources>

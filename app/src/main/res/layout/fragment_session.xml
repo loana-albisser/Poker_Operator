@@ -6,7 +6,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="667dp"
+        android:layout_height="match_parent"
         android:id="@+id/scrollView8" >
 
         <LinearLayout
@@ -14,69 +14,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <LinearLayout
-                android:orientation="horizontal"
+            <TextView
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.5"
-                android:baselineAligned="false"
-                android:showDividers="end">
+                android:layout_height="wrap_content"
+                android:text="@string/txt_gameType"
+                android:id="@+id/txt_gameType"
+                android:textStyle="bold"
+                android:layout_margin="5dp" />
 
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="170dp"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/txt_type"
-                        android:id="@+id/txt_type"
-                        android:layout_margin="5dp"
-                        android:textStyle="bold" />
-
-                    <Spinner
-                        android:layout_width="114dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/spinner_limitType"
-                        android:spinnerMode="dropdown"
-                        android:entries="@array/limit"
-                        android:layout_gravity="left"
-                        android:layout_margin="5dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="right"
-                    android:layout_gravity="right"
-                    android:layout_margin="5dp">
-
-                    <TextView
-                        android:layout_width="168dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/txt_gameType"
-                        android:id="@+id/txt_gameType"
-                        android:textStyle="bold"
-                        android:layout_margin="5dp" />
-
-                    <Spinner
-                        android:layout_width="173dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/spinner_gameType"
-                        android:spinnerMode="dropdown"
-                        android:entries="@array/game"
-                        android:gravity="right"
-                        android:layout_margin="5dp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_limitType"
+                android:spinnerMode="dropdown"
+                android:entries="@array/limit"
+                android:layout_gravity="left"
+                android:layout_margin="5dp" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_type"
+                android:id="@+id/txt_type"
+                android:layout_margin="5dp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_gameType"
+                android:spinnerMode="dropdown"
+                android:entries="@array/game"
+                android:gravity="right"
+                android:layout_margin="5dp" />
+
+            <TextView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/txt_stakes"
                 android:id="@+id/txt_stakes"
@@ -84,7 +57,7 @@
                 android:layout_margin="5dp" />
 
             <Spinner
-                android:layout_width="170dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinner_stake"
                 android:spinnerMode="dropdown"
@@ -111,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:ems="10"
-                    android:id="@+id/editText2"
+                    android:id="@+id/edit_buyIn"
                     android:layout_margin="5dp" />
 
                 <TextView
@@ -131,6 +104,14 @@
                     android:layout_margin="5dp" />
             </LinearLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_start"
+                android:id="@+id/txt_start"
+                android:textStyle="bold"
+                android:layout_margin="5dp" />
+
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -142,7 +123,7 @@
                     android:text="@string/btn_startDate"
                     android:id="@+id/btn_startDate"
                     android:layout_weight="0.5"
-                    android:onClick="doDatePiker"
+                    android:onClick="onClick"
                     android:layout_margin="5dp" />
 
                 <Button
@@ -150,11 +131,19 @@
                     android:layout_height="wrap_content"
                     android:text="@string/btn_startTime"
                     android:id="@+id/btn_start"
-                    android:onClick="doTimePiker"
+                    android:onClick="onClick"
                     android:layout_weight="0.5"
                     android:layout_margin="5dp" />
 
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_end"
+                android:id="@+id/txt_end"
+                android:textStyle="bold"
+                android:layout_margin="5dp" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -167,7 +156,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/btn_endDate"
                     android:id="@+id/btn_endDate"
-                    android:onClick="doDatePiker"
+                    android:onClick="onClick"
                     android:layout_weight="0.5"
                     android:layout_margin="5dp" />
 
@@ -176,7 +165,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/btn_endTime"
                     android:id="@+id/btn_endTime"
-                    android:onClick="doTimePiker"
+                    android:onClick="onClick"
                     android:layout_weight="0.5"
                     android:layout_margin="5dp" />
             </LinearLayout>
@@ -200,11 +189,11 @@
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:ems="10"
-                    android:id="@+id/editText"
+                    android:id="@+id/edit_cashout"
                     android:layout_margin="5dp" />
 
                 <Spinner
-                    android:layout_width="170dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/spinner_currency"
                     android:layout_weight="1"
@@ -237,7 +226,7 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/txt_location"
                 android:id="@+id/txt_location"
@@ -245,7 +234,7 @@
                 android:layout_margin="5dp" />
 
             <Spinner
-                android:layout_width="170dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinner_location"
                 android:spinnerMode="dropdown"
@@ -257,7 +246,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/btn_save"
                 android:id="@+id/btn_save"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                android:onClick="save"/>
 
         </LinearLayout>
     </ScrollView>

@@ -17,6 +17,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".settings.SettingsBankroll"/>
+        <activity android:name=".settings.SettingsCurrency"/>
+        <activity android:name=".settings.SettingsGames"/>
+        <activity android:name=".settings.SettingsLimit"/>
+        <activity android:name=".settings.SettingsLocation"/>
+        <activity android:name=".settings.SettingsStake"/>
+
     </application>
 
 </manifest>

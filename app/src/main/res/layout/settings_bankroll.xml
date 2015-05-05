@@ -3,20 +3,19 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="516dp"
-        android:id="@+id/scrollView" >
-
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/listView" />
-    </ScrollView>
+        android:layout_height="520dp"
+        android:id="@+id/listView_bankroll"
+        android:clickable="true"
+        android:fastScrollEnabled="false" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_add"
-        android:id="@+id/button" />
+        android:id="@+id/btn_add"
+        android:onClick="addBankroll"
+        android:layout_margin="5dp" />
+
 </LinearLayout>

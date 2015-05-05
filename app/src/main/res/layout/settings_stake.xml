@@ -3,20 +3,15 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="516dp"
-        android:id="@+id/scrollView7" >
-
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/listView6" />
-    </ScrollView>
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="520dp"
+        android:id="@+id/listView6" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_add"
         android:id="@+id/button6" />
+
 </LinearLayout>

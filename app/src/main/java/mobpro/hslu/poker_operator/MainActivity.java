@@ -1,6 +1,10 @@
 package mobpro.hslu.poker_operator;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
@@ -8,15 +12,23 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import mobpro.hslu.poker_operator.settings.SettingsBankroll;
 import mobpro.hslu.poker_operator.settings.SettingsCurrency;
@@ -25,9 +37,11 @@ import mobpro.hslu.poker_operator.settings.SettingsLimit;
 import mobpro.hslu.poker_operator.settings.SettingsLocation;
 import mobpro.hslu.poker_operator.settings.SettingsStake;
 
+import static android.widget.AdapterView.*;
+
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, View.OnClickListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -39,28 +53,33 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
+    private Button btnstartDate;
+    private Button btnendDate;
+    private Button btnstartTime;
+    private Button btnendTime;
+
+    private EditText buyIn;
+    private EditText cashout;
+
+    private String dialogText ="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
         // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+        mNavigationDrawerFragment.setUp(R.id.navigation_drawer,(DrawerLayout) findViewById(R.id.drawer_layout));
+
+
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
-        /*FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();*/
         Fragment fragment;
         FragmentManager fragmentManager = getSupportFragmentManager();// For AppCompat use getSupportFragmentManager
         switch(position) {
@@ -133,20 +152,46 @@ public class MainActivity extends ActionBarActivity
         startActivity(intent);
     }
 
-    public void doDatePiker (View v){
-        DialogFragment dialogFragment = new DatePicker();
-        dialogFragment.show(getSupportFragmentManager(), "datePicker");
+    public void save (final View v){
+        buyIn = (EditText)findViewById(R.id.edit_buyIn);
+        cashout = (EditText)findViewById(R.id.edit_cashout);
+        if (buyIn.getText().toString().trim().isEmpty() ||cashout.getText().toString().trim().isEmpty()){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Please fill out at least Buy-In and Cashout");
+            builder.setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if(buyIn.getText().toString().trim().isEmpty()){
+                        buyIn.setFocusable(true);
+                    }
+                    else {
+                        cashout.setFocusable(true);
+                    }
+                }
+            });
+            builder.show();
+        }
+        else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Session saved");
+            builder.setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    /*FragmentManager fragmentManager = getSupportFragmentManager();
+                    Fragment fragment = new FragmentSession();
+                    fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();*/
+                    buyIn.setText("");
+                    cashout.setText("");
+                    buyIn.setFocusable(true);
+                    //setContentView(v);
+                }
+
+            });
+            builder.show();
+        }
     }
 
-    public void doTimePiker (View v){
-        DialogFragment dialogFragment = new TimePicker();
-        dialogFragment.show(getSupportFragmentManager(), "timePicker");
-    }
-
-
-
-
-    @Override
+   @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
@@ -172,6 +217,77 @@ public class MainActivity extends ActionBarActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        btnstartDate = (Button) findViewById(R.id.btn_startDate);
+        btnstartDate.setOnClickListener(this);
+        btnendDate = (Button) findViewById(R.id.btn_endDate);
+        btnendDate.setOnClickListener(this);
+        btnstartTime = (Button) findViewById(R.id.btn_start);
+        btnstartTime.setOnClickListener(this);
+        btnendTime = (Button) findViewById(R.id.btn_endTime);
+        btnendTime.setOnClickListener(this);
+
+        final Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR);
+        int mMonth = c.get(Calendar.MONTH);
+        int mDay = c.get(Calendar.DAY_OF_MONTH);
+        int mHour = c.get(Calendar.HOUR_OF_DAY);
+        int mMinute = c.get(Calendar.MINUTE);
+
+        if(v == btnstartDate){
+            DatePickerDialog dpd = new DatePickerDialog(this,
+                    new DatePickerDialog.OnDateSetListener() {
+
+                        @Override
+                        public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            btnstartDate.setText(dayOfMonth + "." + (monthOfYear + 1) + "." + year);
+                            //btnstartDate.setText("hello");
+                        }
+
+
+                    }, mYear, mMonth, mDay);
+            dpd.show();
+        }
+        if(v == btnendDate){
+            DatePickerDialog dpd = new DatePickerDialog(this,
+                    new DatePickerDialog.OnDateSetListener() {
+
+                        @Override
+                        public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            btnendDate.setText(dayOfMonth + "." + (monthOfYear + 1) + "." + year);
+                            //btnstartDate.setText("hello");
+                        }
+
+
+                    }, mYear, mMonth, mDay);
+            dpd.show();
+        }
+        if(v == btnstartTime){
+            TimePickerDialog tpd = new TimePickerDialog(this,new TimePickerDialog.OnTimeSetListener() {
+
+                @Override
+                public void onTimeSet(android.widget.TimePicker view, int hourOfDay, int minute) {
+                    btnstartTime.setText(hourOfDay + ":" + minute);
+                }
+                    }, mHour, mMinute, false);
+            tpd.show();
+        }
+
+        if(v == btnendTime){
+            TimePickerDialog tpd = new TimePickerDialog(this,new TimePickerDialog.OnTimeSetListener() {
+
+                @Override
+                public void onTimeSet(android.widget.TimePicker view, int hourOfDay, int minute) {
+                    btnendTime.setText(hourOfDay + ":" + minute);
+                }
+            }, mHour, mMinute, false);
+            tpd.show();
+        }
+
+
     }
 
     /**

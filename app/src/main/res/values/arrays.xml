@@ -35,4 +35,9 @@
         <item> Rate2</item>
     </string-array>
 
+    <string-array name="dummy">
+        <item> Dummy1</item>
+        <item> Dummy2</item>
+    </string-array>
+
 </resources>
