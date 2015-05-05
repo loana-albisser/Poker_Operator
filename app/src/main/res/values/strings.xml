@@ -19,7 +19,7 @@
     <string name="btn_location">Location</string>
     <string name="btn_stake">Stake</string>
     <string name="btn_currency">Currency</string>
-    <string name="btn_add">Add</string>
+    <string name="btn_add">Add Bankroll</string>
     <string name="txt_date">Date</string>
     <string name="txt_place">Place</string>
     <string name="txt_stake">Stake</string>
@@ -41,4 +41,8 @@
     <string name="txt_rate">Rate</string>
     <string name="txt_start">Start</string>
     <string name="txt_end">End</string>
+    <string name="btn_addGame">add Game</string>
+    <string name="btn_addLimit">add Limit</string>
+    <string name="btn_addLocation">add Location</string>
+    <string name="btn_addStake">add Stake</string>
 </resources>

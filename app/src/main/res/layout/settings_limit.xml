@@ -2,18 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:background="#594f4f4f">
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="520dp"
-        android:id="@+id/listView4"
+        android:layout_height="0dp"
+        android:id="@+id/listView_limit"
         android:layout_weight="0.68" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btn_add"
-        android:id="@+id/button4" />
+        android:text="@string/btn_addLimit"
+        android:id="@+id/btn_addLimit"
+        android:onClick="addLimit"/>
 
 </LinearLayout>

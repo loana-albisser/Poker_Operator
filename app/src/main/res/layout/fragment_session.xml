@@ -20,7 +20,8 @@
                 android:text="@string/txt_gameType"
                 android:id="@+id/txt_gameType"
                 android:textStyle="bold"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                style="@style/Base.TextAppearance.AppCompat.Subhead" />
 
             <Spinner
                 android:layout_width="match_parent"
@@ -37,7 +38,8 @@
                 android:text="@string/txt_type"
                 android:id="@+id/txt_type"
                 android:layout_margin="5dp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                style="@style/Base.TextAppearance.AppCompat.Subhead" />
 
             <Spinner
                 android:layout_width="match_parent"
@@ -54,7 +56,8 @@
                 android:text="@string/txt_stakes"
                 android:id="@+id/txt_stakes"
                 android:textStyle="bold"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                style="@style/Base.TextAppearance.AppCompat.Subhead" />
 
             <Spinner
                 android:layout_width="match_parent"
@@ -69,7 +72,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="5dp">
+                android:showDividers="end">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -77,7 +80,8 @@
                     android:text="@string/txt_buyIn"
                     android:id="@+id/txt_buyIn"
                     android:textStyle="bold"
-                    android:layout_margin="5dp" />
+                    android:layout_margin="5dp"
+                    style="@style/Base.TextAppearance.AppCompat.Subhead" />
 
                 <EditText
                     android:layout_width="102dp"
@@ -93,7 +97,8 @@
                     android:text="@string/txt_bankroll"
                     android:id="@+id/txt_bankroll"
                     android:textStyle="bold"
-                    android:layout_margin="5dp" />
+                    android:layout_margin="5dp"
+                    style="@style/Base.TextAppearance.AppCompat.Subhead" />
 
                 <Spinner
                     android:layout_width="wrap_content"
@@ -110,7 +115,8 @@
                 android:text="@string/txt_start"
                 android:id="@+id/txt_start"
                 android:textStyle="bold"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                style="@style/Base.TextAppearance.AppCompat.Subhead" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -143,7 +149,8 @@
                 android:text="@string/txt_end"
                 android:id="@+id/txt_end"
                 android:textStyle="bold"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                style="@style/Base.TextAppearance.AppCompat.Subhead" />
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -182,7 +189,8 @@
                     android:text="@string/txt_cashout"
                     android:id="@+id/textView"
                     android:textStyle="bold"
-                    android:layout_margin="5dp" />
+                    android:layout_margin="5dp"
+                    style="@style/Base.TextAppearance.AppCompat.Subhead" />
 
                 <EditText
                     android:layout_width="109dp"
@@ -206,8 +214,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="1"
-                android:layout_margin="5dp">
+                android:weightSum="1">
 
                 <Spinner
                     android:layout_width="170dp"
@@ -231,7 +238,8 @@
                 android:text="@string/txt_location"
                 android:id="@+id/txt_location"
                 android:textStyle="bold"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                style="@style/Base.TextAppearance.AppCompat.Subhead" />
 
             <Spinner
                 android:layout_width="match_parent"

@@ -11,6 +11,7 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -38,6 +39,13 @@ public class SettingsBankroll extends Activity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_bankroll);
+        array = new ArrayList<>();
+        listView = (ListView)findViewById(R.id.listView_bankroll);
+        for (int i=0; i<2;i++){
+            array.add("blabla"+i);
+        }
+        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, array);
+        listView.setAdapter(adapter);
     }
 
     public void addBankroll (View v){
@@ -47,26 +55,14 @@ public class SettingsBankroll extends Activity{
         builder.setTitle("Add Bankroll");
         builder.setView(input);
 
-        listView = (ListView)findViewById(R.id.listView_bankroll);
-        array = new ArrayList<>();
-        addButton = (Button)findViewById(R.id.btn_add);
-        /*for (int i=0; i<2;i++){
-            array.add("blabla"+i);
-        }*/
-        adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, array);
+        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, array);
         listView.setAdapter(adapter);
-
 
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                array.add(input.getText().toString());
                 adapter.add(input.getText().toString());
-
                 adapter.notifyDataSetChanged();
-
-
-
             }
         });
 
