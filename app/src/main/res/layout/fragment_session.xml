@@ -30,7 +30,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/spinner_gameType"
                 android:spinnerMode="dropdown"
-                android:entries="@array/game"
                 android:gravity="right"
                 android:layout_margin="5dp" />
 
@@ -48,7 +47,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/spinner_limitType"
                 android:spinnerMode="dropdown"
-                android:entries="@array/limit"
                 android:layout_gravity="left"
                 android:layout_margin="5dp" />
 
@@ -66,7 +64,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/spinner_stake"
                 android:spinnerMode="dropdown"
-                android:entries="@array/stake"
                 android:layout_margin="5dp"
                 android:layout_gravity="right" />
 
@@ -211,7 +208,6 @@
                 android:id="@+id/spinner_currency"
                 android:layout_weight="1"
                 android:spinnerMode="dropdown"
-                android:entries="@array/currency"
                 android:layout_margin="5dp" />
 
             <TextView
@@ -233,7 +229,6 @@
                     android:layout_width="170dp"
                     android:layout_height="wrap_content"
                     android:id="@+id/spinner_currencyRate"
-                    android:entries="@array/currencyRate"
                     android:layout_margin="5dp"
                     android:spinnerMode="dropdown" />
 
@@ -259,7 +254,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/spinner_location"
                 android:spinnerMode="dropdown"
-                android:entries="@array/location"
                 android:layout_margin="5dp" />
 
             <Button
