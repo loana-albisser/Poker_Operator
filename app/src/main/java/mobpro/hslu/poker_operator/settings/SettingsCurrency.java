@@ -124,6 +124,7 @@ public class SettingsCurrency extends Activity  {
                 Currency currency = new Currency(input.getText().toString());
                 //ToDO Currency setID?
                 //currency.setId(dbAdapter.CreateDbObject(currency));
+                currency.setDescription(String.valueOf(dbAdapter.CreateDbObject(currency)));
                 currencyArrayAdapter.add(currency);
             }
         });
