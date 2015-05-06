@@ -31,6 +31,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import mobpro.hslu.poker_operator.database.DbAdapter;
+import mobpro.hslu.poker_operator.database.DbHelper;
 import mobpro.hslu.poker_operator.settings.SettingsBankroll;
 import mobpro.hslu.poker_operator.settings.SettingsCurrency;
 import mobpro.hslu.poker_operator.settings.SettingsGames;
@@ -68,6 +70,7 @@ public class MainActivity extends ActionBarActivity
     private Spinner listCashout;
     private Spinner listCurrency;
     private Spinner listRate;
+    private DbAdapter dbAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +90,11 @@ public class MainActivity extends ActionBarActivity
 
         //setPreferences();
         //setGameTypePreferences();
+
+        //Create DB
+        this.deleteDatabase(DbAdapter.DB_NAME);
+        dbAdapter = new DbAdapter(this);
+
     }
 
 
@@ -231,9 +239,18 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onResume(){
+        dbAdapter.open();
         super.onResume();
         //setPreferences();
         //setGameTypePreferences();
+
+    }
+
+    @Override
+    public void onPause() {
+        dbAdapter.close();
+        super.onPause();
+
     }
 
     public void setPreferences(){
