@@ -2,10 +2,12 @@ package mobpro.hslu.poker_operator.settings;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -13,46 +15,117 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import mobpro.hslu.poker_operator.R;
+import mobpro.hslu.poker_operator.database.DbAdapter;
+import mobpro.hslu.poker_operator.entity.Currency;
+import mobpro.hslu.poker_operator.entity.Location;
 
 /**
  * Created by User on 04.05.2015.
  */
 public class SettingsLocation extends Activity{
     private ListView listView;
-    private ArrayList<String> array;
-    private ArrayAdapter<String> adapter;
+    DbAdapter dbAdapter;
+    private ArrayList<Location> allLocations;
+    private ArrayAdapter<Location> locationArrayAdapter;
+
     public SettingsLocation(){
 
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_location);
-
-        array = new ArrayList<>();
-        listView = (ListView)findViewById(R.id.listView_location);
-        for (int i=0; i<2;i++){
-            array.add("blabla"+i);
+        try {
+            dbAdapter = new DbAdapter(getApplicationContext());
+            dbAdapter.open();
+            setContentView(R.layout.settings_location);
+            updateList();
+            setOnClickListener(this);
+        }catch (Exception e) {
+            e.printStackTrace();
         }
-        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, array);
-        listView.setAdapter(adapter);
+        super.onCreate(savedInstanceState);
+    }
+
+    private void setOnClickListener(final Context context) {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                final EditText input = new EditText(context);
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                final Location location = locationArrayAdapter.getItem(position);
+                input.setText(location.getDescription());
+
+                builder.setTitle("Edit Location");
+                builder.setView(input);
+
+                builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        location.setDescription(input.getText().toString());
+                        dbAdapter.updateDbObject(location);
+                        updateList();
+                    }
+                });
+
+                builder.setNeutralButton("Cancle", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dbAdapter.deleteDbObject(location);
+                        updateList();
+                    }
+                });
+                builder.show();
+            }
+        });
+    }
+
+    private void updateList() {
+        listView = (ListView)findViewById(R.id.listView_location);
+
+        allLocations = new ArrayList<>(Location.getAllLocation(dbAdapter));
+
+        locationArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, allLocations);
+        listView.setAdapter(locationArrayAdapter);
+    }
+
+    @Override
+    public void onResume(){
+        dbAdapter.open();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause(){
+        dbAdapter.close();
+        super.onPause();
     }
 
     public void addLocation (View v){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final EditText input1 = new EditText(this);
-        input1.setInputType(InputType.TYPE_CLASS_TEXT);
+        final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setTitle("Add Location");
-        builder.setView(input1);
+        builder.setView(input);
 
-        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, array);
-        listView.setAdapter(adapter);
+        locationArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, allLocations);
+        listView.setAdapter(locationArrayAdapter);
 
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                adapter.add(input1.getText().toString());
-                adapter.notifyDataSetChanged();
+                //ToDo Currency?
+                Currency currency = new Currency();
+                Location location = new Location(input.getText().toString(), currency);
+                location.setId(dbAdapter.CreateDbObject(location));
+                locationArrayAdapter.add(location);
             }
         });
 

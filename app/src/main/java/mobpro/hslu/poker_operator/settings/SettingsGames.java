@@ -3,10 +3,12 @@ package mobpro.hslu.poker_operator.settings;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -25,41 +27,107 @@ import mobpro.hslu.poker_operator.entity.Games;
  */
 public class SettingsGames extends Activity{
     private ListView listView;
-    private ArrayList<String> array;
-    private ArrayAdapter <String>adapter;
-    private DbAdapter dbAdapter;
+    DbAdapter dbAdapter;
+    private ArrayList<Games> allGames;
+    private ArrayAdapter<Games> gamesArrayAdapter;
+
     public SettingsGames(){
 
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_games);
-
-        array = new ArrayList<>();
-        listView = (ListView)findViewById(R.id.listView_games);
-        for (int i=0; i<2;i++){
-            array.add("blabla"+i);
+        try {
+            dbAdapter = new DbAdapter(getApplicationContext());
+            dbAdapter.open();
+            setContentView(R.layout.settings_games);
+            updateList();
+            setOnClickListener(this);
+        }catch (Exception e) {
+            e.printStackTrace();
         }
-        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, array);
-        listView.setAdapter(adapter);
+        super.onCreate(savedInstanceState);
     }
 
-        public void addGame (View v){
+    private void setOnClickListener(final Context context) {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                final EditText input = new EditText(context);
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                final Games games = gamesArrayAdapter.getItem(position);
+                input.setText(games.getDescription());
+
+                builder.setTitle("Edit Game");
+                builder.setView(input);
+
+                builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        games.setDescription(input.getText().toString());
+                        dbAdapter.updateDbObject(games);
+                        updateList();
+                    }
+                });
+
+                builder.setNeutralButton("Cancle", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dbAdapter.deleteDbObject(games);
+                        updateList();
+                    }
+                });
+                builder.show();
+            }
+        });
+    }
+
+    private void updateList() {
+        listView = (ListView)findViewById(R.id.listView_games);
+
+        allGames = new ArrayList<>(Games.getAllGames(dbAdapter));
+
+        gamesArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, allGames);
+        listView.setAdapter(gamesArrayAdapter);
+    }
+
+    @Override
+    public void onResume(){
+        dbAdapter.open();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause(){
+        dbAdapter.close();
+        super.onPause();
+    }
+
+
+    public void addGame (View v){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setTitle("Add Game");
         builder.setView(input);
 
-        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, array);
-        listView.setAdapter(adapter);
+        gamesArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, allGames);
+        listView.setAdapter(gamesArrayAdapter);
 
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                adapter.add(input.getText().toString());
-                adapter.notifyDataSetChanged();
+                Games games = new Games(input.getText().toString());
+                games.setId(dbAdapter.CreateDbObject(games));
+                gamesArrayAdapter.add(games);
             }
         });
 

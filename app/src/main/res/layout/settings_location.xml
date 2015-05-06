@@ -12,7 +12,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btn_addStake"
+        android:text="@string/btn_addLocation"
         android:id="@+id/btn_addStake"
         android:onClick="addLocation"/>
 </LinearLayout>

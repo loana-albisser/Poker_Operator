@@ -3,6 +3,7 @@ package mobpro.hslu.poker_operator.settings;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -29,55 +30,119 @@ import mobpro.hslu.poker_operator.Contract.DbObject;
 import mobpro.hslu.poker_operator.R;
 import mobpro.hslu.poker_operator.database.DbAdapter;
 import mobpro.hslu.poker_operator.entity.Bankroll;
+import mobpro.hslu.poker_operator.entity.Currency;
 
 /**
  * Created by User on 04.05.2015.
  */
 public class SettingsBankroll extends Activity{
-    //private String dialogText = "";
     private ListView listView;
-    private ArrayList<String> array;
-    private ArrayAdapter<String>adapter;
-    private Button addButton;
-    private DbAdapter dbAdapter;
+    DbAdapter dbAdapter;
+    private ArrayList<Bankroll> allBankroll;
+    private ArrayAdapter<Bankroll> bankrolleArrayAdapter;
+
 
     public SettingsBankroll(){
 
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.settings_bankroll);
-
-        array = new ArrayList<>();
-        listView = (ListView)findViewById(R.id.listView_bankroll);
-        for (int i=0; i<2;i++){
-            array.add("blabla"+i);
+        try {
+            dbAdapter = new DbAdapter(getApplicationContext());
+            dbAdapter.open();
+            setContentView(R.layout.settings_bankroll);
+            updateList();
+            setOnClickListener(this);
+        }catch (Exception e) {
+            e.printStackTrace();
         }
-        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, array);
-        listView.setAdapter(adapter);
+        super.onCreate(savedInstanceState);
 
+    }
 
+    private void setOnClickListener(final Context context) {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                final EditText input = new EditText(context);
+                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                final Bankroll bankroll = bankrolleArrayAdapter.getItem(position);
+                input.setText(bankroll.getDescription());
+
+                builder.setTitle("Edit Bankroll");
+                builder.setView(input);
+
+                builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        bankroll.setDescription(input.getText().toString());
+                        dbAdapter.updateDbObject(bankroll);
+                        updateList();
+                    }
+                });
+
+                builder.setNeutralButton("Cancle", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dbAdapter.deleteDbObject(bankroll);
+                        updateList();
+                    }
+                });
+                builder.show();
+            }
+        });
+    }
+
+    private void updateList() {
+        listView = (ListView)findViewById(R.id.listView_bankroll);
+
+        allBankroll = new ArrayList<>(Bankroll.getAllBankroll(dbAdapter));
+
+        bankrolleArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, allBankroll);
+        listView.setAdapter(bankrolleArrayAdapter);
+    }
+
+    @Override
+    public void onResume(){
+        dbAdapter.open();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause(){
+        dbAdapter.close();
+        super.onPause();
     }
 
 
     public void addBankroll (View v){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
         builder.setTitle("Add Bankroll");
         builder.setView(input);
 
-        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, array);
-        listView.setAdapter(adapter);
+        bankrolleArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, allBankroll);
+        listView.setAdapter(bankrolleArrayAdapter);
 
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-                //adapter.add(input.getText().toString());
-                adapter.notifyDataSetChanged();
-
+                //ToDo Currency
+                Currency currency = new Currency();
+                Bankroll bankroll = new Bankroll(input.getText().toString(), currency);
+                bankroll.getCurrency();
+                bankroll.setId(dbAdapter.CreateDbObject(bankroll));
+                bankrolleArrayAdapter.add(bankroll);
             }
         });
 
@@ -88,19 +153,6 @@ public class SettingsBankroll extends Activity{
             }
         });
         builder.show();
-
-    }
-
-    public void changeBankroll (View v){
-        ListView list = (ListView)findViewById(R.id.listView_bankroll);
-        list.setClickable(true);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-            }
-        });
-
     }
 }
 
