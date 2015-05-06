@@ -48,6 +48,11 @@ public class SettingsBankroll extends Activity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_bankroll);
+
+
+    }
+
+    public void addContentToList(){
         array = new ArrayList<>();
         listView = (ListView)findViewById(R.id.listView_bankroll);
         dbAdapter = new DbAdapter(this);
@@ -63,7 +68,6 @@ public class SettingsBankroll extends Activity{
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, array);
         //listView.setAdapter(new SimpleCursorAdapter(this, R.layout.settings_bankroll, cursor, ));
-
     }
 
     public void addBankroll (View v){

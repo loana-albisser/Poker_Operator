@@ -2,6 +2,7 @@ package mobpro.hslu.poker_operator.settings;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
@@ -9,8 +10,10 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import mobpro.hslu.poker_operator.Contract.DbObject;
 import mobpro.hslu.poker_operator.R;
@@ -23,14 +26,32 @@ import mobpro.hslu.poker_operator.entity.Games;
 public class SettingsGames extends Activity{
     private ListView listView;
     private ArrayList<String> array;
-    private ArrayAdapter<String> adapter;
+    private ArrayAdapter <String>adapter;
+    private DbAdapter dbAdapter;
     public SettingsGames(){
 
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        array = new ArrayList<>();
+        listView = (ListView)findViewById(R.id.listView_games);
+        for (int i=0; i<2;i++){
+            array.add("blabla"+i);
+        }
+        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, array);
+        listView.setAdapter(adapter);
         setContentView(R.layout.settings_games);
+    }
+
+    public void loadContent(){
+        array = new ArrayList<>();
+        listView = (ListView)findViewById(R.id.listView_games);
+        for (int i=0; i<2;i++){
+            array.add("blabla"+i);
+        }
+        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, array);
+        listView.setAdapter(adapter);
     }
 
     public void addGame (View v){
@@ -46,9 +67,8 @@ public class SettingsGames extends Activity{
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                DbObject dbObject = new Games(input.getText().toString());
-                DbAdapter dbadapter = new DbAdapter(getApplicationContext());
-                dbadapter.CreateDbObject(dbObject);
+                Games games = new Games(input.getText().toString());
+                dbAdapter.updateDbObject(games);
                 adapter.add(input.getText().toString());
                 adapter.notifyDataSetChanged();
             }

@@ -30,6 +30,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/spinner_gameType"
                 android:spinnerMode="dropdown"
+                android:entries="@array/game"
                 android:gravity="right"
                 android:layout_margin="5dp" />
 
