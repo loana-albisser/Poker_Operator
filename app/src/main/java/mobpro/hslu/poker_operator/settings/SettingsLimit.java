@@ -2,16 +2,17 @@ package mobpro.hslu.poker_operator.settings;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import mobpro.hslu.poker_operator.R;
 import mobpro.hslu.poker_operator.database.DbAdapter;
@@ -22,45 +23,67 @@ import mobpro.hslu.poker_operator.entity.Limittype;
  */
 public class SettingsLimit extends Activity{
     private ListView listView;
-    private ArrayList<String> array;
-    private ArrayAdapter<String> adapter;
     DbAdapter dbAdapter;
-
     private ArrayList<Limittype> allLimittypes;
     private ArrayAdapter<Limittype> limittypeArrayAdapter;
+
 
     public SettingsLimit(){
 
     }
-    /*
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        dbAdapter = new DbAdapter(this);
-        setContentView(R.layout.settings_limit);
 
-        array = new ArrayList<>();
-        listView = (ListView)findViewById(R.id.listView_limit);
-        for (int i=0; i<2;i++){
-            array.add("blabla"+i);
+    public void onCreate(Bundle savedInstanceState) {
+        try {
+            dbAdapter = new DbAdapter(getApplicationContext());
+            dbAdapter.open();
+            setContentView(R.layout.settings_limit);
+            updateList();
+            setOnClickListener(this);
+        }catch (Exception e) {
+            e.printStackTrace();
         }
-        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, array);
-        listView.setAdapter(adapter);
-
         super.onCreate(savedInstanceState);
-    }*/
+    }
 
-    public void onCreate(Bundle savedInstanceState) {
-        dbAdapter = new DbAdapter(getApplicationContext());
-        dbAdapter.open();
-        setContentView(R.layout.settings_limit);
+    private void setOnClickListener(final Context context) {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                final EditText input = new EditText(context);
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                final Limittype limittype = limittypeArrayAdapter.getItem(position);
+                input.setText(limittype.getDescription());
 
+                builder.setTitle("Edit Limit");
+                builder.setView(input);
+
+                builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        limittype.setDescription(input.getText().toString());
+                        dbAdapter.updateDbObject(limittype);
+                        updateList();
+                    }
+                });
+
+                builder.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.show();
+            }
+        });
+    }
+
+    private void updateList() {
         listView = (ListView)findViewById(R.id.listView_limit);
         allLimittypes = new ArrayList<>(Limittype.getAllLimittypes(dbAdapter));
 
         limittypeArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, allLimittypes);
         listView.setAdapter(limittypeArrayAdapter);
-
-        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -78,18 +101,19 @@ public class SettingsLimit extends Activity{
     public void addLimit (View v){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setTitle("Add Limit");
         builder.setView(input);
 
-        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, array);
-        listView.setAdapter(adapter);
+        limittypeArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, allLimittypes);
+        listView.setAdapter(limittypeArrayAdapter);
 
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                adapter.add(input.getText().toString());
-                adapter.notifyDataSetChanged();
+                Limittype limittype = new Limittype(input.getText().toString());
+                limittype.setId(dbAdapter.CreateDbObject(limittype));
+                limittypeArrayAdapter.add(limittype);
             }
         });
 
@@ -101,5 +125,6 @@ public class SettingsLimit extends Activity{
         });
         builder.show();
     }
+
 }
 

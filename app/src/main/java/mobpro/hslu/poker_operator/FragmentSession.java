@@ -1,6 +1,5 @@
 package mobpro.hslu.poker_operator;
 
-import android.content.ContentValues;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -9,16 +8,9 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
-import mobpro.hslu.poker_operator.database.DbAdapter;
-import mobpro.hslu.poker_operator.entity.Games;
 
 /**
  * Created by User on 04.05.2015.
@@ -48,6 +40,7 @@ public class FragmentSession extends android.support.v4.app.Fragment {
         /*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         //Game Prefrences
+        TextView gameView = (TextView)rootView.findViewById(R.id.txt_gameType);
         Spinner gameSpinner = (Spinner)rootView.findViewById(R.id.spinner_gameType);
         String gameType = prefs.getString("gameType", "");
         gameSpinner.setSelection(getIndex(gameSpinner, gameType));

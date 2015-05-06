@@ -20,6 +20,7 @@ public class Limittype implements DbObject {
 
     public Limittype(String description) {
         this.description = description;
+        this.id = -1;
     }
 
     public long getId() {
@@ -87,5 +88,11 @@ public class Limittype implements DbObject {
         limittype.setId(Long.parseLong(contentValues.getAsString(DbHelper.COLUMN_ID)));
         limittype.setDescription(contentValues.getAsString(DbHelper.COLUMN_DESCRIPTION));
         return  limittype;
+
+    }
+
+    @Override
+    public String toString(){
+        return getDescription();
     }
 }

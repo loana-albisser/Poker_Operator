@@ -97,6 +97,9 @@ public class DbHelper extends SQLiteOpenHelper{
                 this.COLUMN_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 this.COLUMN_DESCRIPTION + " TEXT) ";
         db.execSQL(CREATE_LIMIT_TABLE);
+        String CREATE_INIT_VALUES = "INSERT INTO "+this.TABLE_LIMITTYPE +" VALUES ( 0, 'No Limit');";
+        db.execSQL(CREATE_INIT_VALUES);
+
     }
 
     private void createLocation(SQLiteDatabase db) throws SQLException{

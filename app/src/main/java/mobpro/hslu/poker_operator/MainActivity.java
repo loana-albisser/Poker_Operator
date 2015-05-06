@@ -165,6 +165,7 @@ public class MainActivity extends ActionBarActivity
 
     public void startLimit(View v) {
         Intent intent = new Intent(this, SettingsLimit.class);
+
         startActivity(intent);
     }
 
