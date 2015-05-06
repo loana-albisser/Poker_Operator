@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,14 +24,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.List;
 
+import mobpro.hslu.poker_operator.Contract.DbObject;
+import mobpro.hslu.poker_operator.database.DbAdapter;
+import mobpro.hslu.poker_operator.database.DbHelper;
+import mobpro.hslu.poker_operator.entity.Bankroll;
+import mobpro.hslu.poker_operator.entity.Currency;
+import mobpro.hslu.poker_operator.entity.Games;
+import mobpro.hslu.poker_operator.entity.Limittype;
+import mobpro.hslu.poker_operator.entity.Location;
+import mobpro.hslu.poker_operator.entity.Session;
+import mobpro.hslu.poker_operator.entity.Stake;
 import mobpro.hslu.poker_operator.settings.SettingsBankroll;
 import mobpro.hslu.poker_operator.settings.SettingsCurrency;
 import mobpro.hslu.poker_operator.settings.SettingsGames;
@@ -57,17 +72,20 @@ public class MainActivity extends ActionBarActivity
     private Button btnstartTime;
     private Button btnendTime;
 
-    private String buyInPref = "buyIn";
-
     private EditText buyIn;
     private EditText cashout;
 
-    private Spinner listGameType;
-    private Spinner listtLimitType;
-    private Spinner listStake;
-    private Spinner listCashout;
-    private Spinner listCurrency;
-    private Spinner listRate;
+    private Spinner gameTpyeSpinner;
+    private Spinner limitTypeSpinner;
+    private Spinner stakeSpinner;
+    private Spinner bankrollSpinner;
+    private Spinner rateSpinner;
+    private Spinner currencySpinner;
+    private Spinner locationSpinner;
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,12 +99,13 @@ public class MainActivity extends ActionBarActivity
         PlaceholderFragment fragment = new PlaceholderFragment();
 
 
+
+
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+        //loadSpinnerData();
 
 
-        //setPreferences();
-        //setGameTypePreferences();
     }
 
 
@@ -136,6 +155,15 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
+    public void loadSpinnerData(){
+        DbAdapter adapter = new DbAdapter(getApplicationContext());
+        //Game
+        Collection<ContentValues> list = adapter.getAllByTable("Games");
+        Spinner gameSpinner = (Spinner)findViewById(R.id.spinner_gameType);
+        ArrayAdapter<ContentValues>arrayAdapter =new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, (List<ContentValues>) list);
+        gameSpinner.setAdapter(arrayAdapter);
+    }
+
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -176,6 +204,16 @@ public class MainActivity extends ActionBarActivity
     public void save (final View v){
         buyIn = (EditText)findViewById(R.id.edit_buyIn);
         cashout = (EditText)findViewById(R.id.edit_cashout);
+
+        gameTpyeSpinner = (Spinner)findViewById(R.id.spinner_gameType);
+        limitTypeSpinner = (Spinner)findViewById(R.id.spinner_limitType);
+        stakeSpinner = (Spinner)findViewById(R.id.spinner_stake);
+        bankrollSpinner = (Spinner)findViewById(R.id.spinner_bankroll);
+        currencySpinner = (Spinner)findViewById(R.id.spinner_currency);
+        rateSpinner = (Spinner)findViewById(R.id.spinner_currencyRate);
+        locationSpinner = (Spinner)findViewById(R.id.spinner_location);
+
+        DbAdapter dbAdapter = new DbAdapter(this);
         if (buyIn.getText().toString().trim().isEmpty() ||cashout.getText().toString().trim().isEmpty()){
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Please fill out at least Buy-In and Cashout");
@@ -193,18 +231,23 @@ public class MainActivity extends ActionBarActivity
             builder.show();
         }
         else {
+            Session sessionObject = new Session();
+            sessionObject.setBuyIn(Float.parseFloat(buyIn.getText().toString()));
+            sessionObject.setCashout(Float.parseFloat(cashout.getText().toString()));
+            sessionObject.setGames((Games) gameTpyeSpinner.getSelectedItem());
+            sessionObject.setLimittype((Limittype) limitTypeSpinner.getSelectedItem());
+            sessionObject.setStake((Stake) stakeSpinner.getSelectedItem());
+            sessionObject.setBankroll((Bankroll) bankrollSpinner.getSelectedItem());
+            sessionObject.setCurrency((Currency) currencySpinner.getSelectedItem());
+            //sessionObject.setCurrencyrate((Rate) gameTpyeSpinner.getSelectedItem());
+            dbAdapter.CreateDbObject(sessionObject);
+
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Session saved");
             builder.setNeutralButton("ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    /*FragmentManager fragmentManager = getSupportFragmentManager();
-                    Fragment fragment = new FragmentSession();
-                    fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();*/
-                    buyIn.setText("");
-                    cashout.setText("");
                     buyIn.setFocusable(true);
-                    //setContentView(v);
                 }
 
             });
@@ -232,41 +275,9 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onResume(){
         super.onResume();
-        //setPreferences();
-        //setGameTypePreferences();
     }
 
-    public void setPreferences(){
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-
-        //SharedPreferences.Editor editor = prefs.edit();
-        //GameType
-
-        listGameType = (Spinner)findViewById(R.id.spinner_gameType);
-        String id = String.valueOf(listGameType.getSelectedItemPosition());
-        //preferences.getInt(id, 0);
-        //SharedPreferences.Editor editor = prefs.edit();
-        //editor.apply();
-        int gamePrefs = prefs.getInt(id, 0);
-
-        listGameType.setSelection(gamePrefs);
-    }
-
-    public void setGameTypePreferences(){
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        TextView view = (TextView) findViewById(R.id.txt_bankroll);
-
-        StringBuilder builder = new StringBuilder();
-
-        String gameType = prefs.getString("gameType","");
-
-        builder.append(""+ gameType);
-        view.setText(builder.toString());
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -409,7 +420,7 @@ public class MainActivity extends ActionBarActivity
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
 
-            //view.setText("hallo");
+
             return rootView;
         }
     }

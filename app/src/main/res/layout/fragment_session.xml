@@ -19,11 +19,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/txt_test" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:text="@string/txt_gameType"
                 android:id="@+id/txt_gameType"
                 android:textStyle="bold"
@@ -35,7 +30,6 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/spinner_gameType"
                 android:spinnerMode="dropdown"
-                android:entries="@array/game"
                 android:gravity="right"
                 android:layout_margin="5dp" />
 
@@ -102,7 +96,7 @@
                 style="@style/Base.TextAppearance.AppCompat.Subhead" />
 
             <Spinner
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/spinner_bankroll"
                 android:spinnerMode="dropdown"
@@ -180,8 +174,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -218,6 +211,15 @@
                 android:layout_weight="1"
                 android:spinnerMode="dropdown"
                 android:entries="@array/currency"
+                android:layout_margin="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_Rate"
+                android:id="@+id/txt_rate"
+                style="@style/Base.TextAppearance.AppCompat.Subhead"
+                android:textStyle="bold"
                 android:layout_margin="5dp" />
 
             <LinearLayout

@@ -12,7 +12,10 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import mobpro.hslu.poker_operator.Contract.DbObject;
 import mobpro.hslu.poker_operator.R;
+import mobpro.hslu.poker_operator.database.DbAdapter;
+import mobpro.hslu.poker_operator.entity.Games;
 
 /**
  * Created by User on 04.05.2015.
@@ -43,6 +46,9 @@ public class SettingsGames extends Activity{
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                DbObject dbObject = new Games(input.getText().toString());
+                DbAdapter dbadapter = new DbAdapter(getApplicationContext());
+                dbadapter.CreateDbObject(dbObject);
                 adapter.add(input.getText().toString());
                 adapter.notifyDataSetChanged();
             }
