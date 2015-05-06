@@ -34,6 +34,8 @@ public class SettingsGames extends Activity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.settings_games);
+
         array = new ArrayList<>();
         listView = (ListView)findViewById(R.id.listView_games);
         for (int i=0; i<2;i++){
@@ -41,7 +43,6 @@ public class SettingsGames extends Activity{
         }
         adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, array);
         listView.setAdapter(adapter);
-        setContentView(R.layout.settings_games);
     }
 
         public void addGame (View v){
@@ -57,8 +58,6 @@ public class SettingsGames extends Activity{
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Games games = new Games(input.getText().toString());
-                dbAdapter.updateDbObject(games);
                 adapter.add(input.getText().toString());
                 adapter.notifyDataSetChanged();
             }

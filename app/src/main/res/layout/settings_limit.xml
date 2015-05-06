@@ -8,12 +8,12 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="520dp"
-        android:id="@+id/listView" />
+        android:id="@+id/listView_limit" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/btn_addLimit"
         android:id="@+id/btn_limit"
-        android:onClick="addGame" />
+        android:onClick="addLimit" />
 </LinearLayout>
