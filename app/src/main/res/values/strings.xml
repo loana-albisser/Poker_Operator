@@ -47,4 +47,5 @@
     <string name="btn_addStake">add Stake</string>
     <string name="action_prefrences">Preferences</string>
     <string name="txt_currency">Currency</string>
+    <string name="txt_Rate">Currency Rate</string>
 </resources>

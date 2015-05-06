@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -30,9 +32,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 
 import mobpro.hslu.poker_operator.database.DbAdapter;
-import mobpro.hslu.poker_operator.database.DbHelper;
+import mobpro.hslu.poker_operator.entity.Games;
+import mobpro.hslu.poker_operator.entity.Session;
 import mobpro.hslu.poker_operator.settings.SettingsBankroll;
 import mobpro.hslu.poker_operator.settings.SettingsCurrency;
 import mobpro.hslu.poker_operator.settings.SettingsGames;
@@ -59,7 +63,12 @@ public class MainActivity extends ActionBarActivity
     private Button btnstartTime;
     private Button btnendTime;
 
-    private String buyInPref = "buyIn";
+    private final Calendar c = Calendar.getInstance();
+    private int mYear = c.get(Calendar.YEAR);
+    private int mMonth = c.get(Calendar.MONTH);
+    private int mDay = c.get(Calendar.DAY_OF_MONTH);
+    private int mHour = c.get(Calendar.HOUR_OF_DAY);
+    private int mMinute = c.get(Calendar.MINUTE);
 
     private EditText buyIn;
     private EditText cashout;
@@ -70,6 +79,7 @@ public class MainActivity extends ActionBarActivity
     private Spinner listCashout;
     private Spinner listCurrency;
     private Spinner listRate;
+
     private DbAdapter dbAdapter;
 
     @Override
@@ -87,24 +97,11 @@ public class MainActivity extends ActionBarActivity
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
-
-        //setPreferences();
-        //setGameTypePreferences();
-
-        //Create DB
         this.deleteDatabase(DbAdapter.DB_NAME);
         dbAdapter = new DbAdapter(this);
-
+        //loadValuesToSpinner();
     }
 
-
-
-
-    private static Context mContext;
-
-    public static Context getContext() {
-        return mContext;
-    }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
@@ -185,6 +182,11 @@ public class MainActivity extends ActionBarActivity
         buyIn = (EditText)findViewById(R.id.edit_buyIn);
         cashout = (EditText)findViewById(R.id.edit_cashout);
         if (buyIn.getText().toString().trim().isEmpty() ||cashout.getText().toString().trim().isEmpty()){
+            Session session = new Session();
+            session.setBuyIn(Float.parseFloat(buyIn.getText().toString()));
+            session.setCashout(Float.parseFloat(cashout.getText().toString()));
+            dbAdapter.CreateDbObject(session);
+
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Please fill out at least Buy-In and Cashout");
             builder.setNeutralButton("ok", new DialogInterface.OnClickListener() {
@@ -206,13 +208,9 @@ public class MainActivity extends ActionBarActivity
             builder.setNeutralButton("ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    /*FragmentManager fragmentManager = getSupportFragmentManager();
-                    Fragment fragment = new FragmentSession();
-                    fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();*/
                     buyIn.setText("");
                     cashout.setText("");
                     buyIn.setFocusable(true);
-                    //setContentView(v);
                 }
 
             });
@@ -239,51 +237,24 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onResume(){
-        dbAdapter.open();
         super.onResume();
-        //setPreferences();
-        //setGameTypePreferences();
-
     }
 
     @Override
-    public void onPause() {
+    public void onPause(){
         dbAdapter.close();
         super.onPause();
-
     }
 
-    public void setPreferences(){
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-
-        //SharedPreferences.Editor editor = prefs.edit();
-        //GameType
-
-        listGameType = (Spinner)findViewById(R.id.spinner_gameType);
-        String id = String.valueOf(listGameType.getSelectedItemPosition());
-        //preferences.getInt(id, 0);
-        //SharedPreferences.Editor editor = prefs.edit();
-        //editor.apply();
-        int gamePrefs = prefs.getInt(id, 0);
-
-        listGameType.setSelection(gamePrefs);
+    public void loadValuesToSpinner(){
+        //Game Values
+        Spinner gameSpinner = (Spinner)findViewById(R.id.spinner_gameType);
+        ArrayList<ContentValues> gameValues = new ArrayList<>();
+        gameValues = (ArrayList<ContentValues>) dbAdapter.getAllByTable("Games");
+        ArrayAdapter gameAdapter = new ArrayAdapter(this, R.layout.fragment_settings, gameValues);
+        gameSpinner.setAdapter(gameAdapter);
     }
 
-    public void setGameTypePreferences(){
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        TextView view = (TextView) findViewById(R.id.txt_bankroll);
-
-        StringBuilder builder = new StringBuilder();
-
-        String gameType = prefs.getString("gameType","");
-
-        builder.append(""+ gameType);
-        view.setText(builder.toString());
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -322,13 +293,6 @@ public class MainActivity extends ActionBarActivity
         btnendTime = (Button) findViewById(R.id.btn_endTime);
         btnendTime.setOnClickListener(this);
 
-        final Calendar c = Calendar.getInstance();
-        int mYear = c.get(Calendar.YEAR);
-        int mMonth = c.get(Calendar.MONTH);
-        int mDay = c.get(Calendar.DAY_OF_MONTH);
-        int mHour = c.get(Calendar.HOUR_OF_DAY);
-        int mMinute = c.get(Calendar.MINUTE);
-
         if(v == btnstartDate){
             DatePickerDialog dpd = new DatePickerDialog(this,
                     new DatePickerDialog.OnDateSetListener() {
@@ -361,7 +325,14 @@ public class MainActivity extends ActionBarActivity
 
                 @Override
                 public void onTimeSet(android.widget.TimePicker view, int hourOfDay, int minute) {
-                    btnstartTime.setText(hourOfDay + ":" + minute);
+                    if (minute <10){
+                        btnstartTime.setText(hourOfDay + ":0" + minute);
+                    }
+                    else
+                    {
+                        btnstartTime.setText(hourOfDay + ":" + minute);
+                    }
+
                 }}, mHour, mMinute, false);
             tpd.show();
         }
