@@ -35,7 +35,9 @@ public class DbAdapter {
     }
 
     public long CreateDbObject(DbObject dbObject) {
-        return db.insert(dbObject.getTableName(), null, dbObject.getContentValues());
+        ContentValues contentValues = dbObject.getContentValues();
+        contentValues.remove(DbHelper.COLUMN_ID);
+        return db.insert(dbObject.getTableName(), null, contentValues);
     }
 
     /**
@@ -64,17 +66,23 @@ public class DbAdapter {
 
     public Collection<ContentValues> getAllByTable(String table){
         Collection<ContentValues> allContentValues = null;
-        String selectQuery = "Select * from "+table;
+        try {
+            String selectQuery = "Select * from " + table;
 
-        Cursor result = db.rawQuery(selectQuery, null);
-        if(result.moveToFirst()) {
-            do {
+            Cursor result = db.rawQuery(selectQuery, null);
+            if (result.moveToFirst()) {
                 allContentValues = new ArrayList<>();
-                ContentValues contentValues = new ContentValues();
-                for (int i = 0; i < result.getColumnCount(); i++) {
-                    contentValues.put(result.getColumnName(i), result.getString(i));
-                }
-            } while (result.moveToNext());
+
+                do {
+                    ContentValues contentValues = new ContentValues();
+                    for (int i = 0; i < result.getColumnCount(); i++) {
+                        contentValues.put(result.getColumnName(i), result.getString(i));
+                    }
+                    allContentValues.add(contentValues);
+                } while (result.moveToNext());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return allContentValues;
     }
