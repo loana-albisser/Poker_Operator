@@ -25,6 +25,8 @@ import mobpro.hslu.poker_operator.entity.Games;
  */
 public class FragmentSession extends android.support.v4.app.Fragment {
 
+    private View rootView;
+
     public FragmentSession(){
 
     }
@@ -32,7 +34,7 @@ public class FragmentSession extends android.support.v4.app.Fragment {
     @Override
     public void onResume(){
         super.onResume();
-        //ToDo implement onResume
+        setPreferences();
     }
 
 
@@ -40,7 +42,62 @@ public class FragmentSession extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_session, container, false);
+        rootView = inflater.inflate(R.layout.fragment_session, container, false);
+        setPreferences();
+
+        /*SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        //Game Prefrences
+        Spinner gameSpinner = (Spinner)rootView.findViewById(R.id.spinner_gameType);
+        String gameType = prefs.getString("gameType", "");
+        gameSpinner.setSelection(getIndex(gameSpinner, gameType));
+
+        //Limit Prefrences
+        Spinner limitSpinner = (Spinner)rootView.findViewById(R.id.spinner_limitType);
+        String limitType = prefs.getString("limit", "");
+        limitSpinner.setSelection(getIndex(limitSpinner, limitType));
+
+
+
+        //Stake
+        Spinner stakeSpinner = (Spinner)rootView.findViewById(R.id.spinner_stake);
+        String stakeType = prefs.getString("stake", "");
+        stakeSpinner.setSelection(getIndex(stakeSpinner, stakeType));
+
+        //BuyIn
+        EditText buyInText = (EditText)rootView.findViewById(R.id.edit_buyIn);
+        String buyInType = prefs.getString("buyIn","");
+        buyInText.setText(buyInType);
+
+        //Bankroll
+        Spinner bankrollSpinner = (Spinner)rootView.findViewById(R.id.spinner_bankroll);
+        String bankrollType = prefs.getString("bankroll", "");
+        bankrollSpinner.setSelection(getIndex(bankrollSpinner, stakeType));
+
+        //Cashout
+        EditText cashoutText = (EditText)rootView.findViewById(R.id.edit_cashout);
+        String cashoutType = prefs.getString("cashout","");
+        cashoutText.setText(cashoutType);
+        //Currency
+        Spinner currencySpinner = (Spinner)rootView.findViewById(R.id.spinner_currency);
+        String currencyType = prefs.getString("currency", "");
+        currencySpinner.setSelection(getIndex(currencySpinner, currencyType));
+
+
+        //CurrencyRate
+        Spinner rateSpinner = (Spinner)rootView.findViewById(R.id.spinner_currencyRate);
+        String rateType = prefs.getString("rate", "");
+        rateSpinner.setSelection(getIndex(rateSpinner, rateType));
+
+        //Location
+        Spinner locationSpinner = (Spinner)rootView.findViewById(R.id.spinner_currency);
+        String locationType = prefs.getString("location", "");
+        locationSpinner.setSelection(getIndex(locationSpinner, locationType));*/
+
+        return rootView;
+    }
+
+    public void setPreferences(){
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         //Game Prefrences
@@ -89,8 +146,6 @@ public class FragmentSession extends android.support.v4.app.Fragment {
         Spinner locationSpinner = (Spinner)rootView.findViewById(R.id.spinner_currency);
         String locationType = prefs.getString("location", "");
         locationSpinner.setSelection(getIndex(locationSpinner, locationType));
-
-        return rootView;
     }
 
     private int getIndex(Spinner spinner, String myString)

@@ -40,10 +40,10 @@ public class SettingsLocation extends Activity{
 
     public void addLocation (View v){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        final EditText input1 = new EditText(this);
+        input1.setInputType(InputType.TYPE_CLASS_TEXT);
         builder.setTitle("Add Location");
-        builder.setView(input);
+        builder.setView(input1);
 
         adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, array);
         listView.setAdapter(adapter);
@@ -51,7 +51,7 @@ public class SettingsLocation extends Activity{
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                adapter.add(input.getText().toString());
+                adapter.add(input1.getText().toString());
                 adapter.notifyDataSetChanged();
             }
         });

@@ -6,8 +6,10 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -40,10 +42,25 @@ public class SettingsStake extends Activity{
 
     public void addStake (View v){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        LinearLayout layout = new LinearLayout(getApplicationContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final EditText bigblind = new EditText(this);
+        final EditText smallblind = new EditText(this);
+
+        layout.addView(bigblind);
+        layout.addView(smallblind);
+        bigblind.setInputType(InputType.TYPE_CLASS_NUMBER);
+        bigblind.setHint("big blind");
+
+        smallblind.setInputType(InputType.TYPE_CLASS_NUMBER);
+        smallblind.setHint("small blind");
+
         builder.setTitle("Add Stake");
-        builder.setView(input);
+        builder.setView(layout);
+
+
+
 
         adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, array);
         listView.setAdapter(adapter);
@@ -51,7 +68,8 @@ public class SettingsStake extends Activity{
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                adapter.add(input.getText().toString());
+                adapter.add(bigblind.getText().toString());
+                adapter.add(smallblind.getText().toString());
                 adapter.notifyDataSetChanged();
             }
         });

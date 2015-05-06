@@ -36,8 +36,8 @@ import mobpro.hslu.poker_operator.entity.Bankroll;
 public class SettingsBankroll extends Activity{
     //private String dialogText = "";
     private ListView listView;
-    private ArrayList<ContentValues> array;
-    private ArrayAdapter<ContentValues>adapter;
+    private ArrayList<String> array;
+    private ArrayAdapter<String>adapter;
     private Button addButton;
     private DbAdapter dbAdapter;
 
@@ -49,26 +49,17 @@ public class SettingsBankroll extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_bankroll);
 
-
-    }
-
-    public void addContentToList(){
         array = new ArrayList<>();
         listView = (ListView)findViewById(R.id.listView_bankroll);
-        dbAdapter = new DbAdapter(this);
-        final Collection<ContentValues> values = dbAdapter.getAllByTable("bankroll");
-        dbAdapter.open();
-
-
-
-        for (ContentValues value: values){
-            array.add(value);
+        for (int i=0; i<2;i++){
+            array.add("blabla"+i);
         }
-        dbAdapter.close();
+        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, array);
+        listView.setAdapter(adapter);
 
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, array);
-        //listView.setAdapter(new SimpleCursorAdapter(this, R.layout.settings_bankroll, cursor, ));
+
     }
+
 
     public void addBankroll (View v){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

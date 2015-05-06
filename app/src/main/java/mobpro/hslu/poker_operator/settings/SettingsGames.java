@@ -44,17 +44,7 @@ public class SettingsGames extends Activity{
         setContentView(R.layout.settings_games);
     }
 
-    public void loadContent(){
-        array = new ArrayList<>();
-        listView = (ListView)findViewById(R.id.listView_games);
-        for (int i=0; i<2;i++){
-            array.add("blabla"+i);
-        }
-        adapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, array);
-        listView.setAdapter(adapter);
-    }
-
-    public void addGame (View v){
+        public void addGame (View v){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_TEXT);

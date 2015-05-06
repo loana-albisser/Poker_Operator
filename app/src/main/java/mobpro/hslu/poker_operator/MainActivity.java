@@ -246,16 +246,6 @@ public class MainActivity extends ActionBarActivity
         super.onPause();
     }
 
-    public void loadValuesToSpinner(){
-        //Game Values
-        Spinner gameSpinner = (Spinner)findViewById(R.id.spinner_gameType);
-        ArrayList<ContentValues> gameValues = new ArrayList<>();
-        gameValues = (ArrayList<ContentValues>) dbAdapter.getAllByTable("Games");
-        ArrayAdapter gameAdapter = new ArrayAdapter(this, R.layout.fragment_settings, gameValues);
-        gameSpinner.setAdapter(gameAdapter);
-    }
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
