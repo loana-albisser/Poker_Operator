@@ -22,9 +22,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import mobpro.hslu.poker_operator.database.DbAdapter;
+import mobpro.hslu.poker_operator.entity.Limittype;
 import mobpro.hslu.poker_operator.entity.Session;
 import mobpro.hslu.poker_operator.settings.SettingsBankroll;
 import mobpro.hslu.poker_operator.settings.SettingsCurrency;
@@ -59,6 +63,9 @@ public class MainActivity extends ActionBarActivity
     private int mHour = c.get(Calendar.HOUR_OF_DAY);
     private int mMinute = c.get(Calendar.MINUTE);
 
+    private Date startDate;
+    private Date endDate;
+
     private EditText buyIn;
     private EditText cashout;
 
@@ -88,7 +95,6 @@ public class MainActivity extends ActionBarActivity
 
         this.deleteDatabase(DbAdapter.DB_NAME);
         dbAdapter = new DbAdapter(this);
-        //loadValuesToSpinner();
     }
 
 
@@ -171,41 +177,67 @@ public class MainActivity extends ActionBarActivity
     public void save (final View v){
         buyIn = (EditText)findViewById(R.id.edit_buyIn);
         cashout = (EditText)findViewById(R.id.edit_cashout);
-        if (buyIn.getText().toString().trim().isEmpty() ||cashout.getText().toString().trim().isEmpty()){
-            Session session = new Session();
-            session.setBuyIn(Float.parseFloat(buyIn.getText().toString()));
-            session.setCashout(Float.parseFloat(cashout.getText().toString()));
-            dbAdapter.CreateDbObject(session);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Please fill out at least Buy-In and Cashout");
-            builder.setNeutralButton("ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if(buyIn.getText().toString().trim().isEmpty()){
+        //Get startDate
+        btnstartDate = (Button)findViewById(R.id.btn_startDate);
+        btnstartTime = (Button)findViewById(R.id.btn_start);
+        listtLimitType = (Spinner)findViewById(R.id.listView_limit);
+        //Object limitValue = listtLimitType.getSelectedItem();
+        //limitValue.
+
+
+        String startDateString = btnstartDate.getText()+" " +btnstartTime.getText();
+        String endDateString= btnendDate.getText()+" " +btnendTime.getText();
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        try {
+            startDate = format.parse(startDateString);
+            endDate = format.parse(endDateString);
+
+            if (buyIn.getText().toString().trim().isEmpty() ||cashout.getText().toString().trim().isEmpty()){
+                Session session = new Session();
+                //session.setLimittype((Limittype)limit);
+                session.setBuyIn(Float.parseFloat(buyIn.getText().toString()));
+                session.setCashout(Float.parseFloat(cashout.getText().toString()));
+                session.setStartDateTime(startDate);
+                dbAdapter.CreateDbObject(session);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Please fill out at least Buy-In and Cashout");
+                builder.setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(buyIn.getText().toString().trim().isEmpty()){
+                            buyIn.setFocusable(true);
+                        }
+                        else {
+                            cashout.setFocusable(true);
+                        }
+                    }
+                });
+                builder.show();
+            }
+            else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Session saved");
+                builder.setNeutralButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        buyIn.setText("");
+                        cashout.setText("");
                         buyIn.setFocusable(true);
                     }
-                    else {
-                        cashout.setFocusable(true);
-                    }
-                }
-            });
-            builder.show();
-        }
-        else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Session saved");
-            builder.setNeutralButton("ok", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    buyIn.setText("");
-                    cashout.setText("");
-                    buyIn.setFocusable(true);
-                }
 
-            });
-            builder.show();
+                });
+                builder.show();
+            }
         }
+        catch (ParseException e){
+            e.getMessage();
+        }
+
+
+
     }
 
    @Override
@@ -279,7 +311,7 @@ public class MainActivity extends ActionBarActivity
 
                         @Override
                         public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            btnstartDate.setText(dayOfMonth + "." + (monthOfYear + 1) + "." + year);
+                            btnstartDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
                         }
 
 
@@ -292,7 +324,7 @@ public class MainActivity extends ActionBarActivity
 
                         @Override
                         public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            btnendDate.setText(dayOfMonth + "." + (monthOfYear + 1) + "." + year);
+                            btnendDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
                             //btnstartDate.setText("hello");
                         }
 
