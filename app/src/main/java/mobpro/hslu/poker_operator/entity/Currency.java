@@ -77,4 +77,9 @@ public class Currency implements DbObject {
         currency.setDescription(contentValues.getAsString(DbHelper.COLUMN_DESCRIPTION));
         return  currency;
     }
+
+    @Override
+    public String toString(){
+        return getDescription();
+    }
 }

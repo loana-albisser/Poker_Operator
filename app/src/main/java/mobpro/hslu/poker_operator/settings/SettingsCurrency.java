@@ -122,8 +122,7 @@ public class SettingsCurrency extends Activity  {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Currency currency = new Currency(input.getText().toString());
-                //ToDO Currency setID?
-                //currency.setId(dbAdapter.CreateDbObject(currency));
+                dbAdapter.CreateDbObject(currency);
                 currencyArrayAdapter.add(currency);
             }
         });

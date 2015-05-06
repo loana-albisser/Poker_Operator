@@ -88,4 +88,9 @@ public class Games implements DbObject {
         games.setDescription(contentValues.getAsString(DbHelper.COLUMN_DESCRIPTION));
         return  games;
     }
+
+    @Override
+    public String toString(){
+        return getDescription();
+    }
 }

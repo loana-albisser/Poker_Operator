@@ -19,8 +19,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import java.net.ContentHandler;
 import java.util.ArrayList;
@@ -126,10 +129,24 @@ public class SettingsBankroll extends Activity{
 
     public void addBankroll (View v){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
-        builder.setTitle("Add Bankroll");
-        builder.setView(input);
+
+
+        final LinearLayout layout = new LinearLayout(getApplicationContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        ArrayList<Currency> allCurrencys = new ArrayList<>(Currency.getAllCurrency(dbAdapter));
+        ArrayAdapter<Currency> currencyArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1,allCurrencys);
+
+        final EditText bankrollInput = new EditText(this);
+        final Spinner currencyInput = new Spinner(this);
+        currencyInput.setAdapter(currencyArrayAdapter);
+        layout.addView(bankrollInput);
+        layout.addView(currencyInput);
+        bankrollInput.setInputType(InputType.TYPE_CLASS_TEXT);
+        bankrollInput.setHint("Bankroll");
+
+
+        builder.setTitle("Add Stake");
+        builder.setView(layout);
 
         bankrolleArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, allBankroll);
         listView.setAdapter(bankrolleArrayAdapter);
@@ -138,9 +155,8 @@ public class SettingsBankroll extends Activity{
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //ToDo Currency
-                Currency currency = new Currency();
-                Bankroll bankroll = new Bankroll(input.getText().toString(), currency);
-                bankroll.getCurrency();
+                Currency currency = (Currency)currencyInput.getSelectedItem();
+                Bankroll bankroll = new Bankroll(bankrollInput.getText().toString(), currency);
                 bankroll.setId(dbAdapter.CreateDbObject(bankroll));
                 bankrolleArrayAdapter.add(bankroll);
             }

@@ -103,4 +103,9 @@ public class Location implements DbObject {
                 contentValues.getAsString(DbHelper.COLUMN_CURRENCY), dbAdapter));
         return  location;
     }
+
+    @Override
+    public String toString(){
+        return getDescription() + "("+getCurrency().getDescription()+")";
+    }
 }

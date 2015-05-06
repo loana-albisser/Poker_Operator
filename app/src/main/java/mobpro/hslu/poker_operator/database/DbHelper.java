@@ -90,6 +90,8 @@ public class DbHelper extends SQLiteOpenHelper{
         String CREATE_CURRENCY_TABLE = "CREATE TABLE "+this.TABLE_CURRENCY +" (" +
                 this.COLUMN_DESCRIPTION + " TEXT PRIMARY KEY) ";
         db.execSQL(CREATE_CURRENCY_TABLE);
+        String CREATE_INIT_VALUES = "INSERT INTO "+this.TABLE_CURRENCY +" VALUES ('Euro');";
+        db.execSQL(CREATE_INIT_VALUES);
     }
 
     private void createLimittype(SQLiteDatabase db) throws SQLException{

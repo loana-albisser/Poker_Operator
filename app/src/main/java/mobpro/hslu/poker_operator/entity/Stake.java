@@ -100,4 +100,9 @@ public class Stake implements DbObject {
         stake.setBigBlind(Float.parseFloat(contentValues.getAsString(DbHelper.COLUMN_BIG_BLIND)));
         return  stake;
     }
+
+    @Override
+    public String toString(){
+        return String.valueOf(getSmallBlind()) + " / "+String.valueOf(getBigBlind());
+    }
 }

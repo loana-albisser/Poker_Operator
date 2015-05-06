@@ -46,15 +46,14 @@ public class DbAdapter {
      * @return All ColumnData's of supplied Object
      */
     public ContentValues getByObject(DbObject dbObject) {
-        ContentValues contentValues = null;
+        ContentValues contentValues = new ContentValues();
 
         if(dbObject.getPrimaryFieldValue()!=null) {
-            Cursor result = db.query(dbObject.getTableName(),
-                    null, dbObject.getPrimaryFieldName() + "=" + dbObject.getPrimaryFieldValue(),
-                    null, null, null, null);
-            if(result != null) {
-                result.moveToFirst();
-
+            String dbQuery = "Select * from " + dbObject.getTableName()+" WHERE " +
+                    dbObject.getPrimaryFieldName() + " =?";
+            String [] args = new String[]{dbObject.getPrimaryFieldValue()};
+            Cursor result = db.rawQuery(dbQuery, args);
+            if(result.moveToFirst()) {
                 for(int i =0; i<result.getColumnCount(); i++){
                     contentValues.put(result.getColumnName(i), result.getString(i));
                 }

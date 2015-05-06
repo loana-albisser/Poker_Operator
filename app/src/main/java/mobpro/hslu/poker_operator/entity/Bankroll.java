@@ -104,4 +104,9 @@ public class Bankroll implements DbObject {
                 contentValues.getAsString(DbHelper.COLUMN_CURRENCY), dbAdapter));
         return  bankroll;
     }
+
+    @Override
+    public String toString(){
+        return getDescription() + " ("+ getCurrency().getDescription()+") ";
+    }
 }
