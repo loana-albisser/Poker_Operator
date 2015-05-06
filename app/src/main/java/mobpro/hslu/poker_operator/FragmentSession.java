@@ -24,6 +24,7 @@ public class FragmentSession extends android.support.v4.app.Fragment {
     @Override
     public void onResume(){
         super.onResume();
+        //ToDo implement onResume
     }
 
 
