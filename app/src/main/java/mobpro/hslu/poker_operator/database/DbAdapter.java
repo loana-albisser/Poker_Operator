@@ -65,13 +65,12 @@ public class DbAdapter {
     }
 
     public Collection<ContentValues> getAllByTable(String table){
-        Collection<ContentValues> allContentValues = null;
+        Collection<ContentValues> allContentValues = new ArrayList<>();;
         try {
             String selectQuery = "Select * from " + table;
 
             Cursor result = db.rawQuery(selectQuery, null);
             if (result.moveToFirst()) {
-                allContentValues = new ArrayList<>();
 
                 do {
                     ContentValues contentValues = new ContentValues();

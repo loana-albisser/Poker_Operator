@@ -18,6 +18,7 @@ import mobpro.hslu.poker_operator.R;
 import mobpro.hslu.poker_operator.database.DbAdapter;
 import mobpro.hslu.poker_operator.entity.Limittype;
 
+
 /**
  * Created by User on 04.05.2015.
  */
@@ -49,6 +50,7 @@ public class SettingsLimit extends Activity{
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 final EditText input = new EditText(context);
                 input.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -67,11 +69,19 @@ public class SettingsLimit extends Activity{
                     }
                 });
 
-                builder.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+                builder.setNeutralButton("Cancle", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
                     }
+                });
+
+                builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dbAdapter.deleteDbObject(limittype);
+                                updateList();
+                            }
                 });
                 builder.show();
             }
@@ -80,6 +90,7 @@ public class SettingsLimit extends Activity{
 
     private void updateList() {
         listView = (ListView)findViewById(R.id.listView_limit);
+
         allLimittypes = new ArrayList<>(Limittype.getAllLimittypes(dbAdapter));
 
         limittypeArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, allLimittypes);
