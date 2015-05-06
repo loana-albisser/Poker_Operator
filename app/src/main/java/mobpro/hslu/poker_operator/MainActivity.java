@@ -31,6 +31,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import mobpro.hslu.poker_operator.database.DbAdapter;
 import mobpro.hslu.poker_operator.settings.SettingsBankroll;
 import mobpro.hslu.poker_operator.settings.SettingsCurrency;
 import mobpro.hslu.poker_operator.settings.SettingsGames;
@@ -69,6 +70,8 @@ public class MainActivity extends ActionBarActivity
     private Spinner listCurrency;
     private Spinner listRate;
 
+    private DbAdapter dbAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,9 +87,8 @@ public class MainActivity extends ActionBarActivity
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
-
-        //setPreferences();
-        //setGameTypePreferences();
+        this.deleteDatabase(DbAdapter.DB_NAME);
+        dbAdapter = new DbAdapter(this);
     }
 
 
@@ -198,13 +200,9 @@ public class MainActivity extends ActionBarActivity
             builder.setNeutralButton("ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    /*FragmentManager fragmentManager = getSupportFragmentManager();
-                    Fragment fragment = new FragmentSession();
-                    fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();*/
                     buyIn.setText("");
                     cashout.setText("");
                     buyIn.setFocusable(true);
-                    //setContentView(v);
                 }
 
             });
@@ -236,37 +234,12 @@ public class MainActivity extends ActionBarActivity
         //setGameTypePreferences();
     }
 
-    public void setPreferences(){
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-
-        //SharedPreferences.Editor editor = prefs.edit();
-        //GameType
-
-        listGameType = (Spinner)findViewById(R.id.spinner_gameType);
-        String id = String.valueOf(listGameType.getSelectedItemPosition());
-        //preferences.getInt(id, 0);
-        //SharedPreferences.Editor editor = prefs.edit();
-        //editor.apply();
-        int gamePrefs = prefs.getInt(id, 0);
-
-        listGameType.setSelection(gamePrefs);
+    @Override
+    public void onPause(){
+        dbAdapter.close();
+        super.onPause();
     }
 
-    public void setGameTypePreferences(){
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-
-        TextView view = (TextView) findViewById(R.id.txt_bankroll);
-
-        StringBuilder builder = new StringBuilder();
-
-        String gameType = prefs.getString("gameType","");
-
-        builder.append(""+ gameType);
-        view.setText(builder.toString());
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
