@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import mobpro.hslu.poker_operator.database.DbAdapter;
+import mobpro.hslu.poker_operator.entity.Session;
 import mobpro.hslu.poker_operator.settings.SettingsBankroll;
 import mobpro.hslu.poker_operator.settings.SettingsCurrency;
 import mobpro.hslu.poker_operator.settings.SettingsGames;
@@ -179,6 +180,11 @@ public class MainActivity extends ActionBarActivity
         buyIn = (EditText)findViewById(R.id.edit_buyIn);
         cashout = (EditText)findViewById(R.id.edit_cashout);
         if (buyIn.getText().toString().trim().isEmpty() ||cashout.getText().toString().trim().isEmpty()){
+            Session session = new Session();
+            session.setBuyIn(Float.parseFloat(buyIn.getText().toString()));
+            session.setCashout(Float.parseFloat(cashout.getText().toString()));
+            dbAdapter.CreateDbObject(session);
+
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Please fill out at least Buy-In and Cashout");
             builder.setNeutralButton("ok", new DialogInterface.OnClickListener() {
