@@ -52,10 +52,17 @@ public class DbHelper extends SQLiteOpenHelper{
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
+
+    private void createSession(SQLiteDatabase db) {
         String CREATE_SESSION_TABLE = "CREATE TABLE "+this.TABLE_SESSION + " (" +
                 this.COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 this.COLUMN_LIMITTYPE + " INTEGER, " +
@@ -68,15 +75,12 @@ public class DbHelper extends SQLiteOpenHelper{
                 this.COLUMN_END_DATE_TIME + " TEXT, " +
                 this.COLUMN_CASHOUT + " REAL, " +
                 this.COLUMN_CURRENCY + " TEXT, " +
-                this.COLUMN_CRRATE + " REAL";
-    }
-
-    private void createSession(SQLiteDatabase db) {
-
+                this.COLUMN_CRRATE + " REAL)";
+        db.execSQL(CREATE_SESSION_TABLE);
     }
 
     private void createGameTable(SQLiteDatabase db) throws SQLException{
-        String CREATE_CURRENCY_TABLE = "CREATE TABLE "+this.TABLE_CURRENCY +" (" +
+        String CREATE_CURRENCY_TABLE = "CREATE TABLE "+this.TABLE_GAMES +" (" +
                 this.COLUMN_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 this.COLUMN_DESCRIPTION+ " TEXT) ";
         db.execSQL(CREATE_CURRENCY_TABLE);
@@ -107,7 +111,7 @@ public class DbHelper extends SQLiteOpenHelper{
         String CREATE_STAKE_TABLE = "CREATE TABLE "+this.TABLE_STAKE +" (" +
                 this.COLUMN_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 this.COLUMN_SMALL_BLIND + " REAL, " +
-                this.COLUMN_SMALL_BLIND + " REAL)";
+                this.COLUMN_BIG_BLIND + " REAL)";
         db.execSQL(CREATE_STAKE_TABLE);
     }
 
