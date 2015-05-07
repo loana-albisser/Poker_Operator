@@ -10,7 +10,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 
@@ -51,18 +53,34 @@ public class SettingsLocation extends Activity{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                final EditText input = new EditText(context);
-                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                final LinearLayout layout = new LinearLayout(getApplicationContext());
+                layout.setOrientation(LinearLayout.VERTICAL);
+                ArrayList<Currency> allCurrencys = new ArrayList<>(Currency.getAllCurrency(dbAdapter));
+                final ArrayAdapter<Currency> currencyArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, allCurrencys);
+
                 final Location location = locationArrayAdapter.getItem(position);
-                input.setText(location.getDescription());
+
+                final EditText locationInput = new EditText(context);
+                locationInput.setText(location.getDescription());
+                final Spinner currencyInput = new Spinner(context);
+                currencyInput.setSelection(getSelectedId(location.getCurrency(), currencyInput));
+                currencyInput.setAdapter(currencyArrayAdapter);
+
+                layout.addView(locationInput);
+                layout.addView(currencyInput);
+                locationInput.setInputType(InputType.TYPE_CLASS_TEXT);
+                locationInput.setHint("Location");
+
 
                 builder.setTitle("Edit Location");
-                builder.setView(input);
+                builder.setView(layout);
+
 
                 builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        location.setDescription(input.getText().toString());
+                        location.setDescription(locationInput.getText().toString());
+                        location.setCurrency(currencyArrayAdapter.getItem(currencyInput.getSelectedItemPosition()));
                         dbAdapter.updateDbObject(location);
                         updateList();
                     }
@@ -87,6 +105,18 @@ public class SettingsLocation extends Activity{
         });
     }
 
+    private int getSelectedId(Currency currency, Spinner spinner) {
+        int index = 0;
+
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).equals(currency)){
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
+
     private void updateList() {
         listView = (ListView)findViewById(R.id.listView_location);
 
@@ -108,12 +138,26 @@ public class SettingsLocation extends Activity{
         super.onPause();
     }
 
-    public void addLocation (View v){
+    public void addLocation (View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
+
+
+        final LinearLayout layout = new LinearLayout(getApplicationContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        ArrayList<Currency> allCurrencys = new ArrayList<>(Currency.getAllCurrency(dbAdapter));
+        ArrayAdapter<Currency> currencyArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, allCurrencys);
+
+        final EditText LocationInput = new EditText(this);
+        final Spinner currencyInput = new Spinner(this);
+        currencyInput.setAdapter(currencyArrayAdapter);
+        layout.addView(LocationInput);
+        layout.addView(currencyInput);
+        LocationInput.setInputType(InputType.TYPE_CLASS_TEXT);
+        LocationInput.setHint("Location");
+
+
         builder.setTitle("Add Location");
-        builder.setView(input);
+        builder.setView(layout);
 
         locationArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, allLocations);
         listView.setAdapter(locationArrayAdapter);
@@ -121,9 +165,8 @@ public class SettingsLocation extends Activity{
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //ToDo Currency?
-                Currency currency = new Currency();
-                Location location = new Location(input.getText().toString(), currency);
+                Currency currency = (Currency) currencyInput.getSelectedItem();
+                Location location = new Location(LocationInput.getText().toString(), currency);
                 location.setId(dbAdapter.CreateDbObject(location));
                 locationArrayAdapter.add(location);
             }

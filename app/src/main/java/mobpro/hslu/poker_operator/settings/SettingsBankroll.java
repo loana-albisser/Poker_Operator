@@ -64,23 +64,39 @@ public class SettingsBankroll extends Activity{
     }
 
     private void setOnClickListener(final Context context) {
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        final LinearLayout layout = new LinearLayout(getApplicationContext());
+                        layout.setOrientation(LinearLayout.VERTICAL);
+                        ArrayList<Currency> allCurrencys = new ArrayList<>(Currency.getAllCurrency(dbAdapter));
+                        final ArrayAdapter<Currency> currencyArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, allCurrencys);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                final EditText input = new EditText(context);
-                input.setInputType(InputType.TYPE_CLASS_NUMBER);
-                final Bankroll bankroll = bankrolleArrayAdapter.getItem(position);
-                input.setText(bankroll.getDescription());
+                        final Bankroll bankroll = bankrolleArrayAdapter.getItem(position);
 
-                builder.setTitle("Edit Bankroll");
-                builder.setView(input);
+                        final EditText bankrollInput = new EditText(context);
+                        bankrollInput.setText(bankroll.getDescription());
+                        final Spinner currencyInput = new Spinner(context);
+                        currencyInput.setSelection(getSelectedId(bankroll.getCurrency(), currencyInput));
+                        currencyInput.setAdapter(currencyArrayAdapter);
+
+                        layout.addView(bankrollInput);
+                        layout.addView(currencyInput);
+                        bankrollInput.setInputType(InputType.TYPE_CLASS_TEXT);
+                        bankrollInput.setHint("Bankroll");
+
+
+                        builder.setTitle("Edit Bankroll");
+                        builder.setView(layout);
+
 
                 builder.setPositiveButton("Edit", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        bankroll.setDescription(input.getText().toString());
+                        bankroll.setDescription(bankrollInput.getText().toString());
+                        bankroll.setCurrency(currencyArrayAdapter.getItem(currencyInput.getSelectedItemPosition()));
                         dbAdapter.updateDbObject(bankroll);
                         updateList();
                     }
@@ -103,6 +119,18 @@ public class SettingsBankroll extends Activity{
                 builder.show();
             }
         });
+    }
+
+    private int getSelectedId(Currency currency, Spinner spinner) {
+        int index = 0;
+
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).equals(currency)){
+                index = i;
+                break;
+            }
+        }
+        return index;
     }
 
     private void updateList() {
@@ -145,7 +173,7 @@ public class SettingsBankroll extends Activity{
         bankrollInput.setHint("Bankroll");
 
 
-        builder.setTitle("Add Stake");
+        builder.setTitle("Add Bankroll");
         builder.setView(layout);
 
         bankrolleArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, allBankroll);
