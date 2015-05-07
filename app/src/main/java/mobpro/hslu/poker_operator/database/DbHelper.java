@@ -77,6 +77,11 @@ public class DbHelper extends SQLiteOpenHelper{
                 this.COLUMN_CURRENCY + " TEXT, " +
                 this.COLUMN_CRRATE + " REAL)";
         db.execSQL(CREATE_SESSION_TABLE);
+        String CREATE_INIT_VALUES =
+                "INSERT INTO "+this.TABLE_SESSION +" " +
+                        "Select 0,0,1,0,500.2,0,1,'2015-02-25 12:00', '2015-02-25 12:30', 23.5,'CHF', 1 "+
+                        "UNION SELECT 1,1,0,1,500.2,0,1,'2015-02-25 12:00', '2015-02-25 12:30', 23.5, 'EUR',1.1;";
+        db.execSQL(CREATE_INIT_VALUES);
     }
 
     private void createGameTable(SQLiteDatabase db) throws SQLException{
@@ -84,13 +89,21 @@ public class DbHelper extends SQLiteOpenHelper{
                 this.COLUMN_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 this.COLUMN_DESCRIPTION+ " TEXT) ";
         db.execSQL(CREATE_CURRENCY_TABLE);
+        String CREATE_INIT_VALUES =
+                "INSERT INTO "+this.TABLE_GAMES +" " +
+                "Select 0,'Holdem' "+
+                "UNION SELECT 1, 'Omaha';";
+        db.execSQL(CREATE_INIT_VALUES);
     }
 
     private void createCurrencyTable(SQLiteDatabase db) throws SQLException{
         String CREATE_CURRENCY_TABLE = "CREATE TABLE "+this.TABLE_CURRENCY +" (" +
                 this.COLUMN_DESCRIPTION + " TEXT PRIMARY KEY) ";
         db.execSQL(CREATE_CURRENCY_TABLE);
-        String CREATE_INIT_VALUES = "INSERT INTO "+this.TABLE_CURRENCY +" VALUES ('Euro');";
+        String CREATE_INIT_VALUES =
+                "INSERT INTO "+this.TABLE_CURRENCY +" " +
+                        "Select 'CHF' "+
+                        "UNION SELECT 'EUR';";
         db.execSQL(CREATE_INIT_VALUES);
     }
 
@@ -99,7 +112,10 @@ public class DbHelper extends SQLiteOpenHelper{
                 this.COLUMN_ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 this.COLUMN_DESCRIPTION + " TEXT) ";
         db.execSQL(CREATE_LIMIT_TABLE);
-        String CREATE_INIT_VALUES = "INSERT INTO "+this.TABLE_LIMITTYPE +" VALUES ( 0, 'No Limit');";
+        String CREATE_INIT_VALUES =
+                "INSERT INTO "+this.TABLE_LIMITTYPE +" " +
+                        "Select 0,'No Limit' "+
+                        "UNION SELECT 1, 'Fixed Limit';";
         db.execSQL(CREATE_INIT_VALUES);
 
     }
@@ -110,6 +126,11 @@ public class DbHelper extends SQLiteOpenHelper{
                 this.COLUMN_DESCRIPTION + " TEXT, " +
                 this.COLUMN_CURRENCY + " TEXT) ";
         db.execSQL(CREATE_LOCATION_TABLE);
+        String CREATE_INIT_VALUES =
+                "INSERT INTO "+this.TABLE_LOCATION +" " +
+                        "Select 0,'GC Luzern', 'CHF' "+
+                        "UNION SELECT 1,'Kings', 'EUR';";
+        db.execSQL(CREATE_INIT_VALUES);
     }
 
     private void createStake(SQLiteDatabase db) throws SQLException{
@@ -118,6 +139,11 @@ public class DbHelper extends SQLiteOpenHelper{
                 this.COLUMN_SMALL_BLIND + " REAL, " +
                 this.COLUMN_BIG_BLIND + " REAL)";
         db.execSQL(CREATE_STAKE_TABLE);
+        String CREATE_INIT_VALUES =
+                "INSERT INTO "+this.TABLE_STAKE +" " +
+                        "Select 0,1,2 "+
+                        "UNION SELECT 1,5, 5;";
+        db.execSQL(CREATE_INIT_VALUES);
     }
 
     private void createBankroll(SQLiteDatabase db) throws SQLException{
@@ -126,6 +152,11 @@ public class DbHelper extends SQLiteOpenHelper{
                 this.COLUMN_DESCRIPTION + " TEXT, " +
                 this.COLUMN_CURRENCY + " TEXT) ";
         db.execSQL(CREATE_BANKROLL_TABLE);
+        String CREATE_INIT_VALUES =
+                "INSERT INTO "+this.TABLE_BANKROLL +" " +
+                        "Select 0,'Inland', 'CHF'"+
+                        "UNION SELECT 1,'Ausland', 'EUR';";
+        db.execSQL(CREATE_INIT_VALUES);
     }
 
 

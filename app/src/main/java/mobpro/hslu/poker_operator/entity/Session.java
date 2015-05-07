@@ -30,7 +30,7 @@ public class Session implements DbObject {
     private Currency currency = new Currency();
     private float currencyrate;
 
-    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yy:HH:mm");
+    private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     public Session() {
         simpleDateFormat.setCalendar(new GregorianCalendar());
