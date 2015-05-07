@@ -1,5 +1,7 @@
 package mobpro.hslu.poker_operator;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -8,10 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import mobpro.hslu.poker_operator.database.DbAdapter;
@@ -20,6 +25,7 @@ import mobpro.hslu.poker_operator.entity.Currency;
 import mobpro.hslu.poker_operator.entity.Games;
 import mobpro.hslu.poker_operator.entity.Limittype;
 import mobpro.hslu.poker_operator.entity.Location;
+import mobpro.hslu.poker_operator.entity.Session;
 import mobpro.hslu.poker_operator.entity.Stake;
 
 /**
@@ -48,6 +54,21 @@ public class FragmentSession extends android.support.v4.app.Fragment {
 
     private ArrayList<Stake> allStakes;
     private ArrayAdapter<Stake> stakeArrayAdapter;
+
+    private Button btnstartDate;
+    private Button btnendDate;
+    private Button btnstartTime;
+    private Button btnendTime;
+
+    private EditText buyIn;
+    private EditText cashout;
+
+    private Spinner listGameType;
+    private Spinner listtLimitType;
+    private Spinner listStake;
+    private Spinner listCashout;
+    private Spinner listCurrency;
+    private Spinner listRate;
 
     public FragmentSession(){
 

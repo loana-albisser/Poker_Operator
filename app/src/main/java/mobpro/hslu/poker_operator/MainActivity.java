@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -28,8 +29,13 @@ import java.util.Calendar;
 import java.util.Date;
 
 import mobpro.hslu.poker_operator.database.DbAdapter;
+import mobpro.hslu.poker_operator.entity.Bankroll;
+import mobpro.hslu.poker_operator.entity.Currency;
+import mobpro.hslu.poker_operator.entity.Games;
 import mobpro.hslu.poker_operator.entity.Limittype;
+import mobpro.hslu.poker_operator.entity.Location;
 import mobpro.hslu.poker_operator.entity.Session;
+import mobpro.hslu.poker_operator.entity.Stake;
 import mobpro.hslu.poker_operator.settings.SettingsBankroll;
 import mobpro.hslu.poker_operator.settings.SettingsCurrency;
 import mobpro.hslu.poker_operator.settings.SettingsGames;
@@ -75,6 +81,8 @@ public class MainActivity extends ActionBarActivity
     private Spinner listCashout;
     private Spinner listCurrency;
     private Spinner listRate;
+    private Spinner listBankroll;
+    private Spinner listLocation;
 
     private DbAdapter dbAdapter;
 
@@ -174,17 +182,28 @@ public class MainActivity extends ActionBarActivity
         startActivity(intent);
     }
 
-    public void save (final View v){
+    public void saveSession (final View v){
         buyIn = (EditText)findViewById(R.id.edit_buyIn);
         cashout = (EditText)findViewById(R.id.edit_cashout);
 
-        //Get startDate
         btnstartDate = (Button)findViewById(R.id.btn_startDate);
         btnstartTime = (Button)findViewById(R.id.btn_start);
-        listtLimitType = (Spinner)findViewById(R.id.listView_limit);
-        //Object limitValue = listtLimitType.getSelectedItem();
-        //limitValue.
 
+        listGameType = (Spinner)findViewById(R.id.spinner_gameType);
+        listtLimitType = (Spinner)findViewById(R.id.spinner_limitType);
+        listStake = (Spinner)findViewById(R.id.spinner_stake);
+        listBankroll = (Spinner)findViewById(R.id.spinner_bankroll);
+        listCurrency = (Spinner)findViewById(R.id.spinner_currency);
+        listRate = (Spinner)findViewById(R.id.spinner_currency);
+        listLocation = (Spinner)findViewById(R.id.spinner_location);
+
+        Bankroll bankrollValue = (Bankroll)listBankroll.getSelectedItem();
+        Currency currencyValue = (Currency)listCurrency.getSelectedItem();
+        Games gameValue = (Games)listGameType.getSelectedItem();
+        Limittype limitValue = (Limittype)listtLimitType.getSelectedItem();
+        Location locationValue = (Location)listLocation.getSelectedItem();
+
+        Stake stakeValue = (Stake)listStake.getSelectedItem();
 
         String startDateString = btnstartDate.getText()+" " +btnstartTime.getText();
         String endDateString= btnendDate.getText()+" " +btnendTime.getText();
@@ -193,13 +212,18 @@ public class MainActivity extends ActionBarActivity
         try {
             startDate = format.parse(startDateString);
             endDate = format.parse(endDateString);
-
             if (buyIn.getText().toString().trim().isEmpty() ||cashout.getText().toString().trim().isEmpty()){
-                Session session = new Session();
-                //session.setLimittype((Limittype)limit);
+                final Session session = new Session();
+                session.setBankroll(bankrollValue);
+                session.setCurrency(currencyValue);
+                session.setGames(gameValue);
+                session.setLimittype(limitValue);
+                session.setLocation(locationValue);
+                session.setStake(stakeValue);
                 session.setBuyIn(Float.parseFloat(buyIn.getText().toString()));
                 session.setCashout(Float.parseFloat(cashout.getText().toString()));
                 session.setStartDateTime(startDate);
+                session.setEndDateTime(endDate);
                 dbAdapter.CreateDbObject(session);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
