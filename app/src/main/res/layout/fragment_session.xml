@@ -232,11 +232,13 @@
                     android:layout_margin="5dp"
                     android:spinnerMode="dropdown" />
 
-                <TextView
+                <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/txt_rate"
-                    android:id="@+id/textView2" />
+                    android:id="@+id/edit_currencyRate"
+                    android:editable="true"
+                    android:inputType="none|numberDecimal"
+                    android:hint="@string/edit_currencyRate" />
 
             </LinearLayout>
 

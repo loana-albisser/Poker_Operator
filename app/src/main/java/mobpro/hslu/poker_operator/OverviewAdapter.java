@@ -4,8 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -23,20 +25,26 @@ import mobpro.hslu.poker_operator.entity.Session;
  * Created by User on 06.05.2015.
  */
 public class OverviewAdapter extends BaseAdapter {
-    private ArrayList<Session> sessionItem;
+    //private ArrayList<Session> sessionItem;
     private LayoutInflater inflater;
+    private ListView listView;
+    DbAdapter dbAdapter;
+    private ArrayList<Session>sessions;
+    private ArrayAdapter<Session> sessionArrayAdapter;
 
 
 
-    public OverviewAdapter (Context c, ArrayList<Session> sessionItem){
-        this.sessionItem = sessionItem;
+    public OverviewAdapter (Context c, ArrayList<Session> sessions){
+        this.sessions = sessions;
         inflater = LayoutInflater.from(c);
+        dbAdapter = new DbAdapter(c);
+        dbAdapter.open();
 
     }
 
     @Override
     public int getCount() {
-        return sessionItem.size();
+        return sessions.size();
     }
 
     @Override
@@ -51,26 +59,32 @@ public class OverviewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        LinearLayout itemLayout = (LinearLayout)inflater.inflate(R.layout.test_item, parent, false);
+        //TextView dateEntry = (TextView)itemLayout.findViewById(R.id.entry_date);
+        //TextView locationEntry = (TextView)itemLayout.findViewById(R.id.entry_place);
+        //TextView durationEntry = (TextView)itemLayout.findViewById(R.id.entry_duration);
+        //TextView stakeEntry = (TextView)itemLayout.findViewById(R.id.entry_stake);
+        //TextView gameEntry = (TextView)itemLayout.findViewById(R.id.entry_gameType);
+        //TextView cashoutEntry = (TextView)itemLayout.findViewById(R.id.entry_cashout);
 
-        LinearLayout itemLayout = (LinearLayout)inflater.inflate(R.layout.overview_item, parent, false);
-        TextView date = (TextView)itemLayout.findViewById(R.id.entry_date);
-        TextView location = (TextView)itemLayout.findViewById(R.id.entry_place);
-        TextView duration = (TextView)itemLayout.findViewById(R.id.entry_duration);
-        TextView stake = (TextView)itemLayout.findViewById(R.id.entry_stake);
-        TextView gameType = (TextView)itemLayout.findViewById(R.id.entry_gameType);
-        TextView cashout = (TextView)itemLayout.findViewById(R.id.entry_cashout);
+        TextView gameTest = (TextView)itemLayout.findViewById(R.id.entry_gameTest);
+        TextView currencyTest = (TextView)itemLayout.findViewById(R.id.entry_currencyTest);
 
-        Session current  = sessionItem.get(position);
-        date.setText(current.getStartDateTime().toString());
-        location.setText(current.getLocation().toString());
-        //ToDo Dauer berechnen
-        duration.setText(current.getEndDateTime().toString());
-        stake.setText(current.getStake().toString());
-        gameType.setText(current.getGames().toString());
-        cashout.setText((int) current.getCashout());
+        //sessions = new ArrayList<>(Session.getAllSessions(dbAdapter));
 
+        Session current  = sessions.get(position);
+        gameTest.setText(current.getGames().toString());
+        currencyTest.setText(current.getCurrency().toString());
 
-
+        itemLayout.setTag(position);
+        /*long end = Long.parseLong(current.getEndDateTime().toString());
+        long start = Long.parseLong(current.getStartDateTime().toString());
+        cashoutEntry.setText(String.valueOf(current.getCashout()));
+        dateEntry.setText(current.getStartDateTime().toString());
+        durationEntry.setText((int) (end-start));
+        gameEntry.setText(current.getGames().toString());
+        locationEntry.setText(current.getLocation().toString());
+        stakeEntry.setText(current.getStake().toString());*/
 
 
         return itemLayout;

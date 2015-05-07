@@ -21,12 +21,17 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 import mobpro.hslu.poker_operator.database.DbAdapter;
 import mobpro.hslu.poker_operator.entity.Bankroll;
@@ -97,12 +102,28 @@ public class MainActivity extends ActionBarActivity
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         PlaceholderFragment fragment = new PlaceholderFragment();
 
+        dbAdapter = new DbAdapter(this);
+        dbAdapter.open();
+
+
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
+        ListView overviewView = (ListView)findViewById(R.id.listView_overview);
+        /*ArrayList<Session>sessionList = new ArrayList<>(Session.getAllSessions(dbAdapter));
+
+        Collections.sort(sessionList, new Comparator<Session>() {
+            @Override
+            public int compare(Session lhs, Session rhs) {
+                return lhs.getStartDateTime().compareTo(rhs.getStartDateTime());
+            }
+        });
+        OverviewAdapter overviewAdapter = new OverviewAdapter(this, sessionList);
+        overviewView.setAdapter(overviewAdapter);*/
+
         this.deleteDatabase(DbAdapter.DB_NAME);
-        dbAdapter = new DbAdapter(this);
+
     }
 
 
@@ -188,6 +209,8 @@ public class MainActivity extends ActionBarActivity
 
         btnstartDate = (Button)findViewById(R.id.btn_startDate);
         btnstartTime = (Button)findViewById(R.id.btn_start);
+        btnendDate = (Button)findViewById(R.id.btn_endDate);
+        btnendTime = (Button)findViewById(R.id.btn_endTime);
 
         listGameType = (Spinner)findViewById(R.id.spinner_gameType);
         listtLimitType = (Spinner)findViewById(R.id.spinner_limitType);
@@ -202,27 +225,27 @@ public class MainActivity extends ActionBarActivity
         Games gameValue = (Games)listGameType.getSelectedItem();
         Limittype limitValue = (Limittype)listtLimitType.getSelectedItem();
         Location locationValue = (Location)listLocation.getSelectedItem();
-
         Stake stakeValue = (Stake)listStake.getSelectedItem();
-
-        String startDateString = btnstartDate.getText()+" "+btnstartTime.getText();
-        String endDateString= btnendDate.getText()+" " +btnendTime.getText();
 
         String startDateText = btnstartDate.getText().toString();
         String startTimeText = btnstartTime.getText().toString();
         String endDateText = btnendDate.getText().toString();
         String endTimeText = btnendTime.getText().toString();
 
-        boolean emptyStartDate = "START DATE".equals(startDateText);
-        boolean emptyStartTime = "START TIME".equals(startTimeText);
-        boolean emptyEndDate = "END DATE".equals(endDateText);
-        boolean emptyEndTime = "END TIME".equals(endTimeText);
+        String startDateString = startDateText+" "+startTimeText;
+        String endDateString= endDateText+" " +endTimeText;
+
+        StringBuilder comparestartDate = new StringBuilder();
+
+        boolean emptyStartDate = "Start Date".equals(startDateText);
+        boolean emptyStartTime = "Start Time".equals(startTimeText);
+        boolean emptyEndDate = "End Date".equals(endDateText);
+        boolean emptyEndTime = "End Time".equals(endTimeText);
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
         try {
-            startDate = format.parse(startDateString);
-            endDate = format.parse(endDateString);
+
             if (buyIn.getText().toString().trim().isEmpty() ||cashout.getText().toString().trim().isEmpty()||emptyStartDate||emptyStartTime||emptyEndDate||emptyEndTime){
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("Please fill in all Values!");
@@ -241,13 +264,15 @@ public class MainActivity extends ActionBarActivity
             }
             else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                startDate = format.parse(startDateString);
+                endDate = format.parse(endDateString);
                 final Session session = new Session();
-                //session.setBankroll(bankrollValue);
-                //session.setCurrency(currencyValue);
-                //session.setGames(gameValue);
+                session.setBankroll(bankrollValue);
+                session.setCurrency(currencyValue);
+                session.setGames(gameValue);
                 session.setLimittype(limitValue);
-                //session.setLocation(locationValue);
-                //session.setStake(stakeValue);
+                session.setLocation(locationValue);
+                session.setStake(stakeValue);
                 session.setBuyIn(Float.parseFloat(buyIn.getText().toString()));
                 session.setCashout(Float.parseFloat(cashout.getText().toString()));
                 session.setStartDateTime(startDate);
@@ -267,6 +292,7 @@ public class MainActivity extends ActionBarActivity
                 });
                 builder.show();
             }
+
         }
         catch (ParseException e){
             e.getMessage();
@@ -361,7 +387,6 @@ public class MainActivity extends ActionBarActivity
                         @Override
                         public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                             btnendDate.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                            //btnstartDate.setText("hello");
                         }
 
 
@@ -390,7 +415,12 @@ public class MainActivity extends ActionBarActivity
 
                 @Override
                 public void onTimeSet(android.widget.TimePicker view, int hourOfDay, int minute) {
-                    btnendTime.setText(hourOfDay + ":" + minute);
+                    if (minute <10){
+                        btnendTime.setText(hourOfDay + ":0" + minute);
+                    }
+                    else {
+                        btnendTime.setText(hourOfDay + ":" + minute);
+                    }
                 }
             }, mHour, mMinute, false);
             tpd.show();
