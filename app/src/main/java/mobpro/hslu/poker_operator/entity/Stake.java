@@ -58,7 +58,7 @@ public class Stake implements DbObject {
 
     @Override
     public String getTableName() {
-        return DbHelper.TABLE_BANKROLL;
+        return DbHelper.TABLE_STAKE;
     }
 
     @Override
