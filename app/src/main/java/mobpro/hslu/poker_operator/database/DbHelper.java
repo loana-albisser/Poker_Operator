@@ -141,8 +141,8 @@ public class DbHelper extends SQLiteOpenHelper{
         db.execSQL(CREATE_STAKE_TABLE);
         String CREATE_INIT_VALUES =
                 "INSERT INTO "+this.TABLE_STAKE +" " +
-                        "Select 0,1,2 "+
-                        "UNION SELECT 1,5, 5;";
+                        "Select 0,1 , 2 "+
+                        "UNION SELECT 1,5,5;";
         db.execSQL(CREATE_INIT_VALUES);
     }
 
