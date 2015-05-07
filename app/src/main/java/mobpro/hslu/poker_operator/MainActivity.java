@@ -205,29 +205,27 @@ public class MainActivity extends ActionBarActivity
 
         Stake stakeValue = (Stake)listStake.getSelectedItem();
 
-        String startDateString = btnstartDate.getText()+" " +btnstartTime.getText();
+        String startDateString = btnstartDate.getText()+" "+btnstartTime.getText();
         String endDateString= btnendDate.getText()+" " +btnendTime.getText();
 
+        String startDateText = btnstartDate.getText().toString();
+        String startTimeText = btnstartTime.getText().toString();
+        String endDateText = btnendDate.getText().toString();
+        String endTimeText = btnendTime.getText().toString();
+
+        boolean emptyStartDate = "START DATE".equals(startDateText);
+        boolean emptyStartTime = "START TIME".equals(startTimeText);
+        boolean emptyEndDate = "END DATE".equals(endDateText);
+        boolean emptyEndTime = "END TIME".equals(endTimeText);
+
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
         try {
             startDate = format.parse(startDateString);
             endDate = format.parse(endDateString);
-            if (buyIn.getText().toString().trim().isEmpty() ||cashout.getText().toString().trim().isEmpty()){
-                final Session session = new Session();
-                session.setBankroll(bankrollValue);
-                session.setCurrency(currencyValue);
-                session.setGames(gameValue);
-                session.setLimittype(limitValue);
-                session.setLocation(locationValue);
-                session.setStake(stakeValue);
-                session.setBuyIn(Float.parseFloat(buyIn.getText().toString()));
-                session.setCashout(Float.parseFloat(cashout.getText().toString()));
-                session.setStartDateTime(startDate);
-                session.setEndDateTime(endDate);
-                dbAdapter.CreateDbObject(session);
-
+            if (buyIn.getText().toString().trim().isEmpty() ||cashout.getText().toString().trim().isEmpty()||emptyStartDate||emptyStartTime||emptyEndDate||emptyEndTime){
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Please fill out at least Buy-In and Cashout");
+                builder.setMessage("Please fill in all Values!");
                 builder.setNeutralButton("ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -243,6 +241,20 @@ public class MainActivity extends ActionBarActivity
             }
             else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                final Session session = new Session();
+                //session.setBankroll(bankrollValue);
+                //session.setCurrency(currencyValue);
+                //session.setGames(gameValue);
+                session.setLimittype(limitValue);
+                //session.setLocation(locationValue);
+                //session.setStake(stakeValue);
+                session.setBuyIn(Float.parseFloat(buyIn.getText().toString()));
+                session.setCashout(Float.parseFloat(cashout.getText().toString()));
+                session.setStartDateTime(startDate);
+                session.setEndDateTime(endDate);
+
+                dbAdapter.CreateDbObject(session);
+
                 builder.setMessage("Session saved");
                 builder.setNeutralButton("ok", new DialogInterface.OnClickListener() {
                     @Override
