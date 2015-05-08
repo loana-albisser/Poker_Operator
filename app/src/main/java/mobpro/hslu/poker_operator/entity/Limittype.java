@@ -63,7 +63,8 @@ public class Limittype implements DbObject {
     }
 
     public static Limittype getLimittypeByID(String id, DbAdapter dbAdapter) {
-        Limittype limittype = new Limittype(id);
+        Limittype limittype = new Limittype();
+        limittype.setId(Long.parseLong(id));
         ContentValues contentValues = dbAdapter.getByObject(limittype);
         if(contentValues!= null) {
             limittype = copyContentValuesToObject(contentValues, limittype);

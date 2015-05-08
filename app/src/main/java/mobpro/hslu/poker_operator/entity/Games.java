@@ -62,7 +62,8 @@ public class Games implements DbObject {
     }
 
     public static Games getGamesByID(String id, DbAdapter dbAdapter) {
-        Games games= new Games(id);
+        Games games= new Games();
+        games.setId(Long.parseLong(id));
         ContentValues contentValues = dbAdapter.getByObject(games);
         if(contentValues!= null) {
             games = copyContentValuesToObject(contentValues, games);

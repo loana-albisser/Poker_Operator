@@ -210,7 +210,7 @@ public class Session implements DbObject {
         }catch (ParseException pe) {
             date = null;
         }
-
+            session.setStartDateTime(date);
         try {
             date = simpleDateFormat.parse(
                     contentValues.getAsString(DbHelper.COLUMN_END_DATE_TIME));
