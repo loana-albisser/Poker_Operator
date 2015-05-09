@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -67,6 +68,7 @@ public class OverviewAdapter extends BaseAdapter {
         Session current  = sessions.get(position);
 
         itemLayout.setTag(position);
+
         cashoutEntry.setText(String.valueOf(current.getCashout()));
         startDateEntry.setText(current.getStartDateTime().toString());
         endDateEntry.setText(current.getEndDateTime().toString());

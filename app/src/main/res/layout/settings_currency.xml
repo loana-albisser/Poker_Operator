@@ -7,13 +7,12 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="520dp"
-        android:id="@+id/listView_currney"
-        android:entries="@array/dummy" />
+        android:id="@+id/listView_currney"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="add Currency"
+        android:text="@string/btn_addCurrency"
         android:id="@+id/btn_addCurrency"
         android:onClick="addCurrency"/>
 

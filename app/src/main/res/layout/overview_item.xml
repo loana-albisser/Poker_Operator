@@ -29,33 +29,39 @@
             <TextView
                 android:text="@string/txt_date"
                 android:padding="3dip"
-                android:id="@+id/txt_startDate"/>
+                android:id="@+id/txt_startDate"
+                android:layout_weight="0.5" />
             <TextView
-                android:gravity="right"
+                android:gravity="left"
                 android:padding="3dip"
-                android:id="@+id/entry_startDate" />
+                android:id="@+id/entry_startDate"
+                android:layout_weight="0.5" />
         </TableRow>
 
         <TableRow android:id="@+id/row_duration">
             <TextView
                 android:text="End Date"
                 android:padding="3dip"
-                android:id="@+id/txt_endDate" />
+                android:id="@+id/txt_endDate"
+                android:layout_weight="0.5" />
             <TextView
-                android:gravity="right"
+                android:gravity="left"
                 android:padding="3dip"
-                android:id="@+id/entry_endDate" />
+                android:id="@+id/entry_endDate"
+                android:layout_weight="0.5" />
         </TableRow>
 
         <TableRow android:id="@+id/row_place">
             <TextView
                 android:text="@string/txt_place"
                 android:padding="3dip"
-                android:id="@+id/txt_place" />
+                android:id="@+id/txt_place"
+                android:layout_weight="0.5" />
             <TextView
-                android:gravity="right"
+                android:gravity="left"
                 android:padding="3dip"
-                android:id="@+id/entry_place" />
+                android:id="@+id/entry_place"
+                android:layout_weight="0.5" />
         </TableRow>
 
         <TableRow android:id="@+id/row_stake">
@@ -63,12 +69,14 @@
             <TextView
                 android:text="@string/txt_stake"
                 android:padding="3dip"
-                android:id="@+id/txt_Stake" />
+                android:id="@+id/txt_Stake"
+                android:layout_weight="0.5" />
 
             <TextView
                 android:padding="3dip"
                 android:id="@+id/entry_stake"
-                android:gravity="right"/>
+                android:gravity="left"
+                android:layout_weight="0.5" />
         </TableRow>
 
         <TableRow android:id="@+id/row_gameType">
@@ -76,25 +84,28 @@
             <TextView
                 android:text="@string/txt_gametype"
                 android:padding="3dip"
-                android:gravity="right"
-                android:id="@+id/txt_gameType" />
+                android:id="@+id/txt_gameType"
+                android:layout_weight="0.5" />
 
             <TextView
                 android:padding="3dip"
                 android:id="@+id/entry_gameType"
-                android:gravity="right"/>
+                android:gravity="left"
+                android:layout_weight="0.5" />
         </TableRow>
 
         <TableRow android:id="@+id/row_Cashout">
             <TextView
                 android:text="@string/txt_cashout"
                 android:padding="3dip"
-                android:id="@+id/txt_cashout" />
+                android:id="@+id/txt_cashout"
+                android:layout_weight="0.5" />
 
             <TextView
                 android:padding="3dip"
                 android:id="@+id/entry_cashout"
-                android:gravity="right" />
+                android:gravity="left"
+                android:layout_weight="0.5" />
         </TableRow>
 
         <TableRow

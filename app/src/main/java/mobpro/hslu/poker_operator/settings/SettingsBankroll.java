@@ -2,34 +2,26 @@ package mobpro.hslu.poker_operator.settings;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 
-import java.net.ContentHandler;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
-import mobpro.hslu.poker_operator.Contract.DbObject;
 import mobpro.hslu.poker_operator.R;
 import mobpro.hslu.poker_operator.database.DbAdapter;
 import mobpro.hslu.poker_operator.entity.Bankroll;
@@ -56,6 +48,7 @@ public class SettingsBankroll extends Activity{
             setContentView(R.layout.settings_bankroll);
             updateList();
             setOnClickListener(this);
+
         }catch (Exception e) {
             e.printStackTrace();
         }
@@ -140,6 +133,10 @@ public class SettingsBankroll extends Activity{
 
         bankrolleArrayAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1, allBankroll);
         listView.setAdapter(bankrolleArrayAdapter);
+        ListView bankrollView = (ListView)findViewById(R.id.listView_bankroll);
+        /*ArrayList<Bankroll>bankrollList = new ArrayList<>(Bankroll.getAllBankroll(dbAdapter));
+        BankrollAdapter overviewAdapter = new BankrollAdapter(getApplicationContext(), bankrollList);
+        bankrollView.setAdapter(overviewAdapter);*/
     }
 
     @Override
@@ -156,7 +153,7 @@ public class SettingsBankroll extends Activity{
 
 
     public void addBankroll (View v){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 
         final LinearLayout layout = new LinearLayout(getApplicationContext());
@@ -172,7 +169,6 @@ public class SettingsBankroll extends Activity{
         bankrollInput.setInputType(InputType.TYPE_CLASS_TEXT);
         bankrollInput.setHint("Bankroll");
 
-
         builder.setTitle("Add Bankroll");
         builder.setView(layout);
 
@@ -182,8 +178,7 @@ public class SettingsBankroll extends Activity{
         builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //ToDo Currency
-                Currency currency = (Currency)currencyInput.getSelectedItem();
+                Currency currency = (Currency) currencyInput.getSelectedItem();
                 Bankroll bankroll = new Bankroll(bankrollInput.getText().toString(), currency);
                 bankroll.setId(dbAdapter.CreateDbObject(bankroll));
                 bankrolleArrayAdapter.add(bankroll);
@@ -197,6 +192,47 @@ public class SettingsBankroll extends Activity{
             }
         });
         builder.show();
+    }
+
+    public class BankrollAdapter extends BaseAdapter {
+
+        private ArrayList<Bankroll> allbankroll;
+        private LayoutInflater inflater;
+        DbAdapter dbAdapter;
+
+        public BankrollAdapter (Context c, ArrayList<Bankroll> allbankroll){
+            this.allbankroll = allbankroll;
+            dbAdapter = new DbAdapter(c);
+            dbAdapter.open();
+            inflater = LayoutInflater.from(c);
+        }
+
+        @Override
+        public int getCount() {
+            return allbankroll.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            LinearLayout songLayout = (LinearLayout)inflater.inflate(R.layout.customlistsettings, parent, false);
+            TextView songView = (TextView)songLayout.findViewById(R.id.textView);
+
+            Bankroll current = allbankroll.get(position);
+            songView.setText(current.getDescription());
+
+            songLayout.setTag(position);
+            return songLayout;
+        }
     }
 }
 
