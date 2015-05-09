@@ -85,7 +85,7 @@ public class MainActivity extends ActionBarActivity
     private Spinner listStake;
     private Spinner listCashout;
     private Spinner listCurrency;
-    private Spinner listRate;
+    private EditText listRate;
     private Spinner listBankroll;
     private Spinner listLocation;
 
@@ -199,7 +199,7 @@ public class MainActivity extends ActionBarActivity
         listStake = (Spinner)findViewById(R.id.spinner_stake);
         listBankroll = (Spinner)findViewById(R.id.spinner_bankroll);
         listCurrency = (Spinner)findViewById(R.id.spinner_currency);
-        listRate = (Spinner)findViewById(R.id.spinner_currency);
+        listRate = (EditText)findViewById(R.id.edit_currencyRate);
         listLocation = (Spinner)findViewById(R.id.spinner_location);
 
         Bankroll bankrollValue = (Bankroll)listBankroll.getSelectedItem();
@@ -208,6 +208,8 @@ public class MainActivity extends ActionBarActivity
         Limittype limitValue = (Limittype)listtLimitType.getSelectedItem();
         Location locationValue = (Location)listLocation.getSelectedItem();
         Stake stakeValue = (Stake)listStake.getSelectedItem();
+        Float currencyRate = Float.parseFloat(listRate.getText().toString());
+
 
         String startDateText = btnstartDate.getText().toString();
         String startTimeText = btnstartTime.getText().toString();
@@ -257,6 +259,7 @@ public class MainActivity extends ActionBarActivity
                 session.setCashout(Float.parseFloat(cashout.getText().toString()));
                 session.setStartDateTime(startDate);
                 session.setEndDateTime(endDate);
+                session.setCurrencyrate(currencyRate);
 
                 dbAdapter.CreateDbObject(session);
 

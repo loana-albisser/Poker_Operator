@@ -15,10 +15,9 @@
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/btn_add"
         android:id="@+id/btn_add"
-        android:onClick="addBankroll"
-        android:layout_margin="5dp" />
+        android:onClick="addBankroll" />
 
 </LinearLayout>
