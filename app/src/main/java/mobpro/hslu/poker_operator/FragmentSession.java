@@ -60,7 +60,14 @@ public class FragmentSession extends android.support.v4.app.Fragment {
     }
 
     @Override
+    public void onPause(){
+        dbAdapter.close();
+        super.onPause();
+    }
+
+    @Override
     public void onResume(){
+        dbAdapter.open();
         super.onResume();
         setPreferences();
     }
@@ -71,7 +78,7 @@ public class FragmentSession extends android.support.v4.app.Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_session, container, false);
         try {
-            dbAdapter = new DbAdapter(getActivity());
+            dbAdapter = new DbAdapter(getActivity().getApplicationContext());
             dbAdapter.open();
             loadData();
 

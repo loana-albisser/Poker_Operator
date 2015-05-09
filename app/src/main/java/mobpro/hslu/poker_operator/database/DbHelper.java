@@ -17,7 +17,7 @@ public class DbHelper extends SQLiteOpenHelper{
     public static String TABLE_LOCATION = "LOCATION";
     public static String TABLE_STAKE = "STAKE";
     public static String TABLE_BANKROLL = "BANKROLL";
-    public static String TABLE_SESSION = "Session";
+    public static String TABLE_SESSION = "SESSION";
 
     public static String COLUMN_ID = "id";
     public static String COLUMN_DESCRIPTION = "description";
@@ -75,7 +75,7 @@ public class DbHelper extends SQLiteOpenHelper{
                 this.COLUMN_END_DATE_TIME + " TEXT, " +
                 this.COLUMN_CASHOUT + " REAL, " +
                 this.COLUMN_CURRENCY + " TEXT, " +
-                this.COLUMN_CRRATE + " REAL)";
+                this.COLUMN_CRRATE + " REAL);";
         db.execSQL(CREATE_SESSION_TABLE);
         String CREATE_INIT_VALUES =
                 "INSERT INTO "+this.TABLE_SESSION +" " +

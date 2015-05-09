@@ -41,7 +41,7 @@ public class FragmentOverview extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_overview, container, false);
-        dbAdapter = new DbAdapter(getActivity());
+        dbAdapter = new DbAdapter(getActivity().getApplicationContext());
         dbAdapter.open();
         setDataToOverview();
         return rootView;

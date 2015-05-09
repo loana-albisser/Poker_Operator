@@ -32,12 +32,24 @@ public class DbAdapter {
 
     public void close() {
         dbHelper.close();
+        db.close();
+        db = null;
     }
 
     public long CreateDbObject(DbObject dbObject) {
-        ContentValues contentValues = dbObject.getContentValues();
-        contentValues.remove(DbHelper.COLUMN_ID);
-        return db.insert(dbObject.getTableName(), null, contentValues);
+
+        long i=-1;
+        if(db.isOpen() && !db.isReadOnly()) {
+            db = dbHelper.getWritableDatabase();
+            try {
+                ContentValues contentValues = dbObject.getContentValues();
+                contentValues.remove(DbHelper.COLUMN_ID);
+                i = db.insert(dbObject.getTableName(), null, contentValues);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return i;
     }
 
     /**

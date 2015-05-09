@@ -101,7 +101,7 @@ public class MainActivity extends ActionBarActivity
         mTitle = getTitle();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        dbAdapter = new DbAdapter(this);
+        dbAdapter = new DbAdapter(getApplicationContext());
         dbAdapter.open();
 
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
@@ -287,6 +287,7 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onResume(){
+        dbAdapter.open();
         super.onResume();
     }
 
