@@ -12,6 +12,8 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import mobpro.hslu.poker_operator.Contract.DbObject;
 import mobpro.hslu.poker_operator.database.DbAdapter;
@@ -39,8 +41,8 @@ public class OverviewAdapter extends BaseAdapter {
         inflater = LayoutInflater.from(c);
         dbAdapter = new DbAdapter(c);
         dbAdapter.open();
-
     }
+
 
     @Override
     public int getCount() {
@@ -57,38 +59,35 @@ public class OverviewAdapter extends BaseAdapter {
         return 0;
     }
 
+    public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
+        long diffInMillies = date2.getTime() - date1.getTime();
+        return timeUnit.convert(diffInMillies,TimeUnit.MINUTES);
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        LinearLayout itemLayout = (LinearLayout)inflater.inflate(R.layout.test_item, parent, false);
-        //TextView dateEntry = (TextView)itemLayout.findViewById(R.id.entry_date);
-        //TextView locationEntry = (TextView)itemLayout.findViewById(R.id.entry_place);
-        //TextView durationEntry = (TextView)itemLayout.findViewById(R.id.entry_duration);
-        //TextView stakeEntry = (TextView)itemLayout.findViewById(R.id.entry_stake);
-        //TextView gameEntry = (TextView)itemLayout.findViewById(R.id.entry_gameType);
-        //TextView cashoutEntry = (TextView)itemLayout.findViewById(R.id.entry_cashout);
-
-        TextView gameTest = (TextView)itemLayout.findViewById(R.id.entry_gameTest);
-        TextView currencyTest = (TextView)itemLayout.findViewById(R.id.entry_currencyTest);
-
-        //sessions = new ArrayList<>(Session.getAllSessions(dbAdapter));
+        LinearLayout itemLayout = (LinearLayout)inflater.inflate(R.layout.overview_item, parent, false);
+        TextView startDateEntry = (TextView)itemLayout.findViewById(R.id.entry_startDate);
+        TextView endDateEntry = (TextView)itemLayout.findViewById(R.id.entry_endDate);
+        TextView locationEntry = (TextView)itemLayout.findViewById(R.id.entry_place);
+        TextView stakeEntry = (TextView)itemLayout.findViewById(R.id.entry_stake);
+        TextView gameEntry = (TextView)itemLayout.findViewById(R.id.entry_gameType);
+        TextView cashoutEntry = (TextView)itemLayout.findViewById(R.id.entry_cashout);
+        TextView sessionEntry = (TextView)itemLayout.findViewById(R.id.entry_session);
 
         Session current  = sessions.get(position);
-        gameTest.setText(current.getGames().toString());
-        currencyTest.setText(current.getCurrency().toString());
+        long timeDiff = getDateDiff(current.getEndDateTime(), current.getStartDateTime(), TimeUnit.MINUTES);
 
         itemLayout.setTag(position);
-        /*long end = Long.parseLong(current.getEndDateTime().toString());
-        long start = Long.parseLong(current.getStartDateTime().toString());
         cashoutEntry.setText(String.valueOf(current.getCashout()));
-        dateEntry.setText(current.getStartDateTime().toString());
-        durationEntry.setText((int) (end-start));
+        startDateEntry.setText(current.getStartDateTime().toString());
+        endDateEntry.setText(current.getEndDateTime().toString());
         gameEntry.setText(current.getGames().toString());
         locationEntry.setText(current.getLocation().toString());
-        stakeEntry.setText(current.getStake().toString());*/
+        stakeEntry.setText(current.getStake().toString());
+        sessionEntry.setText("Session: " + current.getId());
 
 
         return itemLayout;
-
-
     }
 }

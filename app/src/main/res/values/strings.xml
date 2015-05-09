@@ -20,7 +20,7 @@
     <string name="btn_stake">Stake</string>
     <string name="btn_currency">Currency</string>
     <string name="btn_add">Add Bankroll</string>
-    <string name="txt_date">Date</string>
+    <string name="txt_date">Start Date</string>
     <string name="txt_place">Place</string>
     <string name="txt_stake">Stake</string>
     <string name="txt_gametype">GameType</string>
@@ -50,4 +50,5 @@
     <string name="txt_Rate">Currency Rate</string>
     <string name="preferences" />
     <string name="edit_currencyRate">currency rate</string>
+    <string name="entry_session">Session</string>
 </resources>

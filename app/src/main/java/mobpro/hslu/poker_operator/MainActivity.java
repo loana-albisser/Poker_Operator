@@ -100,32 +100,15 @@ public class MainActivity extends ActionBarActivity
         getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-        PlaceholderFragment fragment = new PlaceholderFragment();
 
         dbAdapter = new DbAdapter(this);
         dbAdapter.open();
 
-
-
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        ListView overviewView = (ListView)findViewById(R.id.listView_overview);
-        /*ArrayList<Session>sessionList = new ArrayList<>(Session.getAllSessions(dbAdapter));
-
-        Collections.sort(sessionList, new Comparator<Session>() {
-            @Override
-            public int compare(Session lhs, Session rhs) {
-                return lhs.getStartDateTime().compareTo(rhs.getStartDateTime());
-            }
-        });
-        OverviewAdapter overviewAdapter = new OverviewAdapter(this, sessionList);
-        overviewView.setAdapter(overviewAdapter);*/
-
         this.deleteDatabase(DbAdapter.DB_NAME);
-
     }
-
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
@@ -235,8 +218,6 @@ public class MainActivity extends ActionBarActivity
         String startDateString = startDateText+" "+startTimeText;
         String endDateString= endDateText+" " +endTimeText;
 
-        StringBuilder comparestartDate = new StringBuilder();
-
         boolean emptyStartDate = "Start Date".equals(startDateText);
         boolean emptyStartTime = "Start Time".equals(startTimeText);
         boolean emptyEndDate = "End Date".equals(endDateText);
@@ -288,7 +269,6 @@ public class MainActivity extends ActionBarActivity
                         cashout.setText("");
                         buyIn.setFocusable(true);
                     }
-
                 });
                 builder.show();
             }
@@ -304,16 +284,6 @@ public class MainActivity extends ActionBarActivity
 
    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        /*if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main, menu);
-            restoreActionBar();
-            return true;
-        };
-       menu.add(Menu.NONE, 1, Menu.NONE, "Prefrences");
-        return super.onCreateOptionsMenu(menu);*/
        getMenuInflater().inflate(R.menu.main, menu);
        menu.add(Menu.NONE, 0, 0, "Preferences");
        return true;
@@ -338,13 +308,7 @@ public class MainActivity extends ActionBarActivity
         //int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
-            return true;
-        }*/
-        //Intent intent = new Intent(this, SessionPrefrences.class);
-        //startActivity(intent);
 
-        //return super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
              case 0:
                  Intent intent = new Intent(this, SessionPrefrences.class);
@@ -354,7 +318,6 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
 
     }
-
 
     @Override
     public void onClick(View v) {

@@ -41,10 +41,19 @@ public class FragmentOverview extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_overview, container, false);
-        //overviewView = (ListView) rootView.findViewById(R.id.listView_overview);
         dbAdapter = new DbAdapter(getActivity());
         dbAdapter.open();
+        setDataToOverview();
+        return rootView;
+    }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        setDataToOverview();
+    }
+
+    public void setDataToOverview(){
         overviewView = (ListView)rootView.findViewById(R.id.listView_overview);
         ArrayList<Session>sessionList = new ArrayList<>(Session.getAllSessions(dbAdapter));
 
@@ -57,10 +66,8 @@ public class FragmentOverview extends android.support.v4.app.Fragment {
         OverviewAdapter overviewAdapter = new OverviewAdapter(getActivity(), sessionList);
         overviewView.setAdapter(overviewAdapter);
 
-
-        return rootView;
-
     }
+
 }
 
 
