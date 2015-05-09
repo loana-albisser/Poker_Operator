@@ -27,14 +27,9 @@ import mobpro.hslu.poker_operator.entity.Session;
  * Created by User on 06.05.2015.
  */
 public class OverviewAdapter extends BaseAdapter {
-    //private ArrayList<Session> sessionItem;
     private LayoutInflater inflater;
-    private ListView listView;
     DbAdapter dbAdapter;
     private ArrayList<Session>sessions;
-    private ArrayAdapter<Session> sessionArrayAdapter;
-
-
 
     public OverviewAdapter (Context c, ArrayList<Session> sessions){
         this.sessions = sessions;
@@ -42,7 +37,6 @@ public class OverviewAdapter extends BaseAdapter {
         dbAdapter = new DbAdapter(c);
         dbAdapter.open();
     }
-
 
     @Override
     public int getCount() {
@@ -59,11 +53,6 @@ public class OverviewAdapter extends BaseAdapter {
         return 0;
     }
 
-    public static long getDateDiff(Date date1, Date date2, TimeUnit timeUnit) {
-        long diffInMillies = date2.getTime() - date1.getTime();
-        return timeUnit.convert(diffInMillies,TimeUnit.MINUTES);
-    }
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LinearLayout itemLayout = (LinearLayout)inflater.inflate(R.layout.overview_item, parent, false);
@@ -76,7 +65,6 @@ public class OverviewAdapter extends BaseAdapter {
         TextView sessionEntry = (TextView)itemLayout.findViewById(R.id.entry_session);
 
         Session current  = sessions.get(position);
-        long timeDiff = getDateDiff(current.getEndDateTime(), current.getStartDateTime(), TimeUnit.MINUTES);
 
         itemLayout.setTag(position);
         cashoutEntry.setText(String.valueOf(current.getCashout()));
@@ -87,7 +75,7 @@ public class OverviewAdapter extends BaseAdapter {
         stakeEntry.setText(current.getStake().toString());
         sessionEntry.setText("Session: " + current.getId());
 
-
         return itemLayout;
     }
+
 }

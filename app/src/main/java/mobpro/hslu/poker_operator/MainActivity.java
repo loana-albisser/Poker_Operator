@@ -104,7 +104,6 @@ public class MainActivity extends ActionBarActivity
         dbAdapter = new DbAdapter(this);
         dbAdapter.open();
 
-        // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
         this.deleteDatabase(DbAdapter.DB_NAME);
@@ -223,7 +222,7 @@ public class MainActivity extends ActionBarActivity
         boolean emptyEndDate = "End Date".equals(endDateText);
         boolean emptyEndTime = "End Time".equals(endTimeText);
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm");
 
         try {
 
@@ -277,9 +276,6 @@ public class MainActivity extends ActionBarActivity
         catch (ParseException e){
             e.getMessage();
         }
-
-
-
     }
 
    @Override

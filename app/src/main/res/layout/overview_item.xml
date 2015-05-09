@@ -63,7 +63,6 @@
             <TextView
                 android:text="@string/txt_stake"
                 android:padding="3dip"
-                android:layout_column="0"
                 android:id="@+id/txt_Stake" />
 
             <TextView
@@ -88,7 +87,6 @@
 
         <TableRow android:id="@+id/row_Cashout">
             <TextView
-                android:layout_column="0"
                 android:text="@string/txt_cashout"
                 android:padding="3dip"
                 android:id="@+id/txt_cashout" />

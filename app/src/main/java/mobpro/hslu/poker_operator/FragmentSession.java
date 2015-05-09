@@ -55,21 +55,6 @@ public class FragmentSession extends android.support.v4.app.Fragment {
     private ArrayList<Stake> allStakes;
     private ArrayAdapter<Stake> stakeArrayAdapter;
 
-    private Button btnstartDate;
-    private Button btnendDate;
-    private Button btnstartTime;
-    private Button btnendTime;
-
-    private EditText buyIn;
-    private EditText cashout;
-
-    private Spinner listGameType;
-    private Spinner listtLimitType;
-    private Spinner listStake;
-    private Spinner listCashout;
-    private Spinner listCurrency;
-    private Spinner listRate;
-
     public FragmentSession(){
 
     }

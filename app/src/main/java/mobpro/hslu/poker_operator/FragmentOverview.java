@@ -32,7 +32,7 @@ public class FragmentOverview extends android.support.v4.app.Fragment {
     private ListView listView;
     DbAdapter dbAdapter;
     private ArrayList<Session> allSessions;
-    private ArrayAdapter<Session> sessionArrayAdapter;
+    private OverviewAdapter sessionArrayAdapter;
 
     public FragmentOverview() {
 
@@ -65,9 +65,7 @@ public class FragmentOverview extends android.support.v4.app.Fragment {
         });
         OverviewAdapter overviewAdapter = new OverviewAdapter(getActivity(), sessionList);
         overviewView.setAdapter(overviewAdapter);
-
     }
-
 }
 
 
