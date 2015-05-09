@@ -1,23 +1,26 @@
 package mobpro.hslu.poker_operator;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.ListPreference;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import mobpro.hslu.poker_operator.database.DbAdapter;
 import mobpro.hslu.poker_operator.entity.Bankroll;
@@ -25,7 +28,6 @@ import mobpro.hslu.poker_operator.entity.Currency;
 import mobpro.hslu.poker_operator.entity.Games;
 import mobpro.hslu.poker_operator.entity.Limittype;
 import mobpro.hslu.poker_operator.entity.Location;
-import mobpro.hslu.poker_operator.entity.Session;
 import mobpro.hslu.poker_operator.entity.Stake;
 
 /**
@@ -54,6 +56,11 @@ public class FragmentSession extends android.support.v4.app.Fragment {
 
     private ArrayList<Stake> allStakes;
     private ArrayAdapter<Stake> stakeArrayAdapter;
+
+    private ArrayList<String> allRateOptions;
+    private ArrayAdapter<String> rateArrayAdapter;
+
+    private String webURI = "http://download.finance.yahoo.com/d/quotes.csv?s=XXXYYY=X+YYYXXX=X&f=nl1d1t1";
 
     public FragmentSession(){
 
@@ -91,12 +98,12 @@ public class FragmentSession extends android.support.v4.app.Fragment {
     }
 
     public void loadData(){
-        Spinner bankrollSpinner = (Spinner)rootView.findViewById(R.id.spinner_bankroll);
+        final Spinner bankrollSpinner = (Spinner)rootView.findViewById(R.id.spinner_bankroll);
         allBankrolls = new ArrayList<>(Bankroll.getAllBankroll(dbAdapter));
         bankrollArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, allBankrolls);
         bankrollSpinner.setAdapter(bankrollArrayAdapter);
 
-        Spinner currencySpinner = (Spinner)rootView.findViewById(R.id.spinner_currency);
+        final Spinner currencySpinner = (Spinner)rootView.findViewById(R.id.spinner_currency);
         allCurrencies = new ArrayList<>(Currency.getAllCurrency(dbAdapter));
         currencyArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, allCurrencies);
         currencySpinner.setAdapter(currencyArrayAdapter);
@@ -120,6 +127,31 @@ public class FragmentSession extends android.support.v4.app.Fragment {
         allStakes = new ArrayList<>(Stake.getAllStakes(dbAdapter));
         stakeArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, allStakes);
         stakeSpinner.setAdapter(stakeArrayAdapter);
+
+        final Spinner rateSpinner = (Spinner)rootView.findViewById(R.id.spinner_currencyRate);
+        allRateOptions = new ArrayList<String>(Arrays.asList("Manual", "yahooService"));
+        rateArrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, allRateOptions);
+        rateSpinner.setAdapter(rateArrayAdapter);
+        rateSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(rateArrayAdapter.getItem(position) == "yahooService")
+                {
+                    String webServiceURI = "";
+                    String baseCurrency = bankrollArrayAdapter.getItem(bankrollSpinner.getSelectedItemPosition()).getCurrency().getDescription();
+                    String targetCurrency = currencyArrayAdapter.getItem(currencySpinner.getSelectedItemPosition()).getDescription();
+                    webServiceURI = webURI.replace("XXX",baseCurrency).replace("YYY", targetCurrency);
+                    ExchangeRateService exchangeRateService = new ExchangeRateService();
+                    exchangeRateService.execute(webServiceURI);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                return;
+            }
+        });
+
     }
 
     public void setPreferences(){
@@ -184,6 +216,64 @@ public class FragmentSession extends android.support.v4.app.Fragment {
         return index;
     }
 
+    private Object openHttpConnection(String urlString) {
+        Object content =null;
+
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection httpConnection = (HttpURLConnection)url.openConnection();
+            httpConnection.setAllowUserInteraction(false);
+            httpConnection.setInstanceFollowRedirects(true);
+            httpConnection.setRequestMethod("GET");
+            httpConnection.connect();
+            if(httpConnection.getResponseCode()== HttpURLConnection.HTTP_OK){
+                content = httpConnection.getContent();
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return content;
+    }
+
+    private class ExchangeRateService extends AsyncTask<String, Void, String> {
+        protected String doInBackground(String... urls){
+            String text = "";
+            for(String url : urls){
+                text = downloadText(url);
+            }
+            return text;
+        }
+
+
+
+        private String downloadText(String stringURI)
+        {
+            String text = "";
+            String fullText = "";
+            InputStream inputStream = null;
+            try{
+                inputStream = (InputStream)openHttpConnection(stringURI);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                while ((text = reader.readLine())!=null) {
+                    String [] rowData = text.split(",");
+                    fullText = rowData[1];
+                    break;
+                }
+                inputStream.close();
+            }
+            catch (IOException io){
+                io.printStackTrace();
+            }
+            return fullText;
+        }
+
+        protected void onPostExecute(String result) {
+            EditText rateEdit = (EditText)rootView.findViewById(R.id.edit_currencyRate);
+            rateEdit.setText(result);
+        }
+    }
 
 
 
