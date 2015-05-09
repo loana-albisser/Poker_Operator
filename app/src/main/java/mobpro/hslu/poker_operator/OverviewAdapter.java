@@ -34,7 +34,7 @@ public class OverviewAdapter extends BaseAdapter {
     public OverviewAdapter (Context c, ArrayList<Session> sessions){
         this.sessions = sessions;
         inflater = LayoutInflater.from(c);
-        dbAdapter = new DbAdapter(c);
+        dbAdapter = new DbAdapter(c.getApplicationContext());
         dbAdapter.open();
     }
 

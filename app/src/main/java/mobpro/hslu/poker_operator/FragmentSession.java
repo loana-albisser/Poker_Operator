@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -118,7 +119,7 @@ public class FragmentSession extends android.support.v4.app.Fragment {
         limittypeArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, allLimittypes);
         limitSpinner.setAdapter(limittypeArrayAdapter);
 
-        Spinner locationSpinner = (Spinner)rootView.findViewById(R.id.spinner_location);
+        final Spinner locationSpinner = (Spinner)rootView.findViewById(R.id.spinner_location);
         allLocations = new ArrayList<>(Location.getAllLocation(dbAdapter));
         locationArrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, allLocations);
         locationSpinner.setAdapter(locationArrayAdapter);
@@ -139,7 +140,7 @@ public class FragmentSession extends android.support.v4.app.Fragment {
                 {
                     String webServiceURI = "";
                     String baseCurrency = bankrollArrayAdapter.getItem(bankrollSpinner.getSelectedItemPosition()).getCurrency().getDescription();
-                    String targetCurrency = currencyArrayAdapter.getItem(currencySpinner.getSelectedItemPosition()).getDescription();
+                    String targetCurrency = locationArrayAdapter.getItem(locationSpinner.getSelectedItemPosition()).getCurrency().getDescription();
                     webServiceURI = webURI.replace("XXX",baseCurrency).replace("YYY", targetCurrency);
                     ExchangeRateService exchangeRateService = new ExchangeRateService();
                     exchangeRateService.execute(webServiceURI);
@@ -233,35 +234,53 @@ public class FragmentSession extends android.support.v4.app.Fragment {
         catch (Exception e)
         {
             e.printStackTrace();
+            content=null;
         }
         return content;
     }
 
     private class ExchangeRateService extends AsyncTask<String, Void, String> {
         protected String doInBackground(String... urls){
+
             String text = "";
-            for(String url : urls){
-                text = downloadText(url);
+            try {
+                for (String url : urls) {
+                    text = downloadText(url);
+                }
+            }catch (IllegalStateException ex){
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                    Toast.makeText(getActivity().getApplicationContext(), "Keine Internetverbindung", Toast.LENGTH_SHORT).show();
+                 }
+                });
+            }catch (Exception e) {
+                e.printStackTrace();
+
             }
             return text;
         }
 
 
 
-        private String downloadText(String stringURI)
+        private String downloadText(String stringURI) throws IllegalStateException
         {
             String text = "";
             String fullText = "";
             InputStream inputStream = null;
             try{
                 inputStream = (InputStream)openHttpConnection(stringURI);
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                while ((text = reader.readLine())!=null) {
-                    String [] rowData = text.split(",");
-                    fullText = rowData[1];
-                    break;
+                if(inputStream!=null) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                    while ((text = reader.readLine()) != null) {
+                        String[] rowData = text.split(",");
+                        fullText = rowData[1];
+                        break;
+                    }
+                    inputStream.close();
+                }else{
+                    throw new IllegalStateException("Keine Internetverbindung");
                 }
-                inputStream.close();
             }
             catch (IOException io){
                 io.printStackTrace();

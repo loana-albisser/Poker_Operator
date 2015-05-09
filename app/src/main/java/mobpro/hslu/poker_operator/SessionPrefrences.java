@@ -49,7 +49,7 @@ public class SessionPrefrences extends Activity {
         @Override
         public void onCreate (final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            dbAdapter = new DbAdapter(getActivity());
+            dbAdapter = new DbAdapter(getActivity().getApplicationContext());
             dbAdapter.open();
 
             addPreferencesFromResource(R.xml.preferences);

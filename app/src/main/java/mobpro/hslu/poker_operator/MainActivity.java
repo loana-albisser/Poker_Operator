@@ -100,13 +100,13 @@ public class MainActivity extends ActionBarActivity
         getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
+        //this.deleteDatabase(DbAdapter.DB_NAME);
         dbAdapter = new DbAdapter(getApplicationContext());
         dbAdapter.open();
 
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        this.deleteDatabase(DbAdapter.DB_NAME);
+
     }
 
     @Override
